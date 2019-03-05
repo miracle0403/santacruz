@@ -44,6 +44,8 @@ hbs.registerHelper('paginate', require('handlebars-paginate'));
 var mainseoTemplate = fs.readFileSync(__dirname + '/views/mainseo.hbs', 'utf8');
 hbs.registerPartial('mainseo', mainseoTemplate); 
 
+var slideTemplate = fs.readFileSync(__dirname + '/views/slide.hbs', 'utf8');
+hbs.registerPartial('slide', slideTemplate); 
 
 //middlewares.
 app.use(logger('dev'));
