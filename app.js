@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 //var env  = require('dotenv').config();
 var hbs = require('express-handlebars');
+//var paginate = require('handlebars-paginate');
 //const path = require('path');
 var fs = require('fs');
 
@@ -37,10 +38,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 //create helper
-//hbs.registerHelper('paginate', paginate);
-
-
-
+hbs.registerHelper('paginate', require('handlebars-paginate'));
 //register partials
 
 var mainseoTemplate = fs.readFileSync(__dirname + '/views/mainseo.hbs', 'utf8');
@@ -100,6 +98,7 @@ passport.use(new localStrategy(function(username, password, done){
 	db.query('SELECT user_id, email, password FROM user WHERE username = ?', [username], function (err, results, fields){
 		if (err) {done(err)};
 		if (results.length === 0){
+			console.log('false usename')
 			done(null, false, {
 				message: 'Invalid Username'
 			});
@@ -108,8 +107,10 @@ passport.use(new localStrategy(function(username, password, done){
 			const hash = results[0].password.toString();
 			bcrypt.compare(password, hash, function(err, response){
 				if (response === true){
+					console.log('good details')
 					return done(null, {user_id: results[0].user_id});
 				}else{
+					console.log('false password')
 					return done(null, false,{
 						message:'Invalid Password'
 					});

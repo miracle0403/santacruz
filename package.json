@@ -1,5 +1,5 @@
 {
-   "name": "obionyi",
+   "name": "santacruz",
    "version": "0.0.0",
    "private": true,
    "scripts": {
@@ -23,6 +23,7 @@
       "express-session": "^1.15.6",
       "express-validator": "^5.1.2",
       "formidable": "^1.2.1",
+      "handlebars-paginate": "^0.1.0",
       "hbs": "^4.0.2",
       "http-errors": "~1.6.2",
       "js-alert": "^1.0.4",

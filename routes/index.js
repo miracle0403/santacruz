@@ -10,26 +10,112 @@ var fs = require('fs');
 var passport = require('passport');
 var db = require('../db.js'); 
 var bcrypt = require('bcrypt-nodejs');
+var securePin = require('secure-pin');
 var path = require('path');
 var url = require('url'); 
-//var routeValidator = require( 'express-route-validator' );
+var math = require( 'mathjs' );
+function rounds( err, results ){ 
+	if ( err ) throw err;
+}
+const saltRounds = bcrypt.genSalt( 10, rounds);
 
+
+//adminfunction
+function admin(x, y, j){
+	y.query('SELECT user FROM admin WHERE user = ?', [x], function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			j.redirect('/404');
+		}
+	});
+}
 
 //get home 
 router.get('/',  function(req, res, next) {
-	res.redirect('/pages/1');
+	res.render('index', {title: 'SANCTA CRUX'});
+});
+
+//product 
+router.get('/category=:category/product=:product',  function(req, res, next) {
+	var product = req.params.product;
+	var category = req.params.category;
+	db.query( 'SELECT * FROM products WHERE product_name = ? and category_name = ?',  [product, category], function(err, results, fields){
+		if( err ) throw err;
+		var product = results[0];
+		res.render('preoduct', {title: product.product_name, product: product});
+	});
+});
+
+//get category
+router.get('/category=:category/page=:page',  function(req, res, next) {
+	var limit  =  12;
+	var page = req.params.page;
+	var category = req.params.category;
+	db.query( 'SELECT COUNT( product_id) AS total FROM products WHERE status  = ? and category_name = ?',  ['in stock', category], function(err, results, fields){
+		if( err ) throw err;
+		var totalrows = results[0].total;
+		var pages = math.ceil( totalrows / limit ); 
+		if( pages === 1 ){
+			var offset = 0;
+			var sql = 'SELECT * FROM products WHERE status  =  ? and category_name = ? LIMIT ?, ?';
+			var details =  ['in stock', category, offset, limit];
+			db.query(sql, details, function ( err, results, fields ){
+				if( err ) throw err;
+				var products = results;
+				//var links = ['/pages/1'];
+				res.render( 'category', {title: 'ALL' + category, products: products, pagination: { page: page, pageCount: pages }});
+			});
+		}else{
+			var offset = ( page * limit ) - limit;
+			var sql = 'SELECT * FROM products WHERE status  =  ? and category_name = ? LIMIT ?, ?';
+			var details =  ['in stock', category, offset, limit];
+			db.query(sql, details, function ( err, results, fields ){
+				if( err ) throw err;
+				var products = results;
+				res.render( 'index', {title: 'ALL' + category, products: products, pagination: { page: page, pageCount: pages }});
+			});
+		}
+	});
 });
 
 /* GET home page. */
-router.get('/pages/:page', function ( req, res, next ){
-	
+router.get('/page=:page', function ( req, res, next ){
+	var limit  =  12;
+	var page = req.params.page;
+	db.query( 'SELECT COUNT( product_id) AS total FROM products WHERE status  = ?',  ['in stock'], function(err, results, fields){
+		if( err ) throw err;
+		var totalrows = results[0].total;
+		var pages = math.ceil( totalrows / limit ); 
+		if( pages === 1 ){
+			var offset = 0;
+			var sql = 'SELECT * FROM products WHERE status  =  ?  LIMIT ?, ?';
+			var details =  ['in stock', offset, limit];
+			db.query(sql, details, function ( err, results, fields ){
+				if( err ) throw err;
+				var products = results;
+				//var links = ['/pages/1'];
+				res.render( 'index', {title: 'IFEY SAMUEL', products: products, pagination: { page: page, pageCount: pages }});
+			});
+		}else{
+			var offset = ( page * limit ) - limit;
+			var sql = 'SELECT * FROM products WHERE status  =  ?  LIMIT ?, ?';
+			var details =  ['in stock', offset, limit];
+			db.query(sql, details, function ( err, results, fields ){
+				if( err ) throw err;
+				var products = results;
+				res.render( 'index', {title: 'IFEY SAMUEL', products: products, pagination: { page: page, pageCount: pages }});
+			});
+		}
+	});
 });
 
 
 //ensureLoggedIn( '/login' ),
 //get upload
-router.get('/admin',  function(req, res, next) {
+router.get('/admin', ensureLoggedIn('/login'), function(req, res, next) {
 	//get the category.
+	var currentUser = req.session.passport.user.user_id;
+	admin(currentUser, db, res);
 	db.query('SELECT category_name FROM category', function(err, results, fields){
 		if(err) throw err;
 		var category = results;
@@ -74,12 +160,34 @@ passport.deserializeUser(function(user_id, done){
   done(null, user_id)
 });
 
+//post add status.
+router.post('/status', function(req, res, next) {
+	var status = req.body.status;
+	var id = req.body.id;
+	db.query( 'UPDATE products SET status  = ? WHERE id = ?', [status, id], function ( err, results, fields ){
+		if(err) throw err;
+		res.render('upload', {title: 'ADMIN CORNER', statussuccess: 'Update was successful'});
+	});
+});
+
+//post search.
+router.post('/searchproduct', function(req, res, next) {
+	var product_id = req.body.product_id;
+	
+	db.query( 'SELECT * FROM products WHERE product_id = ?', [product_id], function ( err, results, fields ){
+		if(err) throw err;
+		var product = results;
+		res.render('upload', {title: 'ADMIN CORNER', searchresults: product});
+	});
+});
+
+
 //post add new category never existed.
 router.post('/newcat', function(req, res, next) {
 	var category = req.body.category;
 	db.query( 'SELECT category_name FROM category WHERE category_name  = ?', [category], function ( err, results, fields ){
 	console.log( results )
-		if ( results.length === 0 ){
+		if ( results.length > 0 ){
 			var error = 'This category exists already';
 			res.render( 'upload', {title: 'ADD CATEGORY FAILED', parenterror: error});
 		}else{
@@ -100,6 +208,63 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: true
 }));
 
+//add new admin
+router.post('/addadmin', function (req, res, next) {
+	var user = req.body.user;
+	db.query('SELECT user_id, username FROM user WHERE user_id = ?', [user], function(err, results, fields){
+		if( err ) throw err;
+		if ( results.length === 0){
+			var error = 'Sorry this user does not exist.';
+			res.render('upload', {adderror: error });
+		}
+		else{
+			db.query('SELECT user FROM admin WHERE user = ?', [user], function(err, results, fields){
+				if( err ) throw err;
+				if( results.length === 0 ){
+					db.query('INSERT INTO admin ( user ) values( ? )', [user], function(err, results, fields){
+						if( err ) throw err;
+						var success = 'New Admin Added Successfully!';
+						res.render('upload', {addsuccess: success });
+					});
+				}
+				if( results.length > 0 ){
+					var error = 'This user is already an Admin';
+					res.render('upload', {adderror: error });
+				} 
+			});
+		}
+	});
+});
+
+
+//delete admin
+router.post('/deladmin', function (req, res, next) {
+	var user = req.body.user;
+	db.query('SELECT user_id, username FROM user WHERE user_id = ?', [user], function(err, results, fields){
+		if( err ) throw err;
+		if ( results.length === 0){
+			var error = 'Sorry this user does not exist.';
+			res.render('upload', {adminerror: error });
+		}
+		else{
+			db.query('SELECT user FROM admin WHERE user = ?', [user], function(err, results, fields){
+				if( err ) throw err;
+				if( results.length === 0 ){
+					var error = 'Sorry this admin does not exist.';
+					res.render('upload', {adminerror: error });
+				}
+				else {
+					db.query('DELETE FROM admin WHERE user = ?', [user], function(err, results, fields){
+						if( err ) throw err;
+						var success = 'Admin deleted successfully!'
+						res.render('upload', {adminsuccess: success });
+					});
+				}
+			});
+		}
+	});
+});
+
 //post add category 
 router.post('/addcategory',  function(req, res, next) {
 	var category = req.body.category;
@@ -107,7 +272,7 @@ router.post('/addcategory',  function(req, res, next) {
 	console.log( req.body );
 	db.query( 'SELECT category_name FROM category WHERE category_name  = ?', [parent], function ( err, results, fields ){
 	console.log( results )
-		if ( results.length === 0 ){
+		if ( results.length > 0 ){
 			var error = 'This category exists already';
 			res.render( 'upload', {title: 'ADD CATEGORY FAILED', childerror: error});
 		}else{
@@ -122,75 +287,57 @@ router.post('/addcategory',  function(req, res, next) {
 
 
 router.post('/upload', function(req, res, next) {
-	var img = req.body.img;
-	var category = req.body.category;
-	var price = req.body.price;
-	var description = req.body.description;
-	product = req.body.product;
-	
 	//var category = req.body.category;
 	if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
 		// parse a file upload
 		var form = new formidable.IncomingForm();
-		form.parse(req, function(err, fields, files) {
-			if (err) throw err;
-					var filed =  JSON.stringify(files.img);
-					var file  =  JSON.parse( filed );
-					var name  =  file.name;
-					console.log( file );
-					form.on('fileBegin', function(name, file) {
-						var newpath =  '/Users/STAIN/desktop/sites/obionyi/public/images/samples/' + file.name;
-						var oldpath  =  file.path;
-						var type  =  file.type;
-						var size  =  file.size;
-						var oldfile  =  path.basename(oldpath);
-						//console.log(newfile + 'is the new file');
-						//change the file name
-						console.log(newpath);
-						//if the type is not supported.
-						var supported  =  {
-							png: 'image/png',
-							jpg: 'image/jpg',
-							jpeg: 'image/jpeg'
-						}
-						if( type  == supported.png || type == supported.jpg || type == supported.jpeg){
-							//console.log( 'file is supported', typeof supported.jpeg, typeof type, supported.jpeg === type, supported.jpeg == type);
-							//check the size
-							if( size > 3000000 ){
-								var error = 'This file is too big. the maximum file size is 3mb.'
-								//console.log( 'file too big' )
-								//delete the file
-								fs.unlink('oldpath', function(err){
-									if(err) throw err;
-									res.render('upload', {title: 'FILE UPLOAD FAILED', error: error});
-								});
-							}else{
-								
-								// move the file.
-								fs.rename(oldpath, newpath, function( err ){
-									if( err ) throw err;
-									console.log( 'file moved' );
-									securePin.generatePin(10, function(pin){
-										//insert joor
-										var product_id = pin;
-										db.query('INSERT INTO products (price, category, product_name, image, product_id, status) values (?, ?, ?, ?, ?, ?)', [price, category, product, newpath, product_id, 'instock'], function(err, results, fields){
-											if (err) throw err;
-											var success = 'Product added successfully';
-											res.render('upload', {title: 'FILE UPLOAD SUCCESSFUL', success: success});
-										});
-									});
-								});
-							}
-						}else{
-							//console.log( 'is not supported' );
-							var error = 'This file is not supported. Use a jpg or png or jpeg file.';
-							res.render('upload', {title: 'FILE UPLOAD FAILED', error: error});
-						}
+		form.uploadDir = '/Users/STAIN/desktop/sites//obionyi/public/images/samples';
+		form.maxFileSize = 2 * 1024 * 1024;
+		form.parse(req, function(err, fields, files) {
+			//var img = fields.img; 
+			var category = fields.category;
+			var price = fields.price;
+			var description = fields.description;
+			var product = fields.product;
+			console.log(fields);
+			var getfiles = JSON.stringify( files );
+			var file = JSON.parse( getfiles );
+			var oldpath = file.img.path;
+			//console.log(oldpath, typeof oldpath, typeof file, file.path, typeof file.path);
+			var name = file.img.name;
+			form.keepExtensions = true;
+			var newpath = '/Users/STAIN/desktop/sites/obionyi/public/images/samples/' + name;
+			var img = '/images/samples' + name;
+			form.on('fileBegin', function( name, file){
+				//rename the file
+				fs.rename(oldpath, newpath, function(err){
+					if (err) throw err;
+					//console.log('file renamed');
+				});
+				//secure pin for code
+				securePin.generatePin(10, function(pin){
+				//save in the database.
+					db.query('INSERT INTO products (image, category, price, product_id, description, product_name, status) VALUES (?, ?, ?, ?, ?, ?, ?)', [img, category, price, pin, description, product, 'in stock'], function(err,results, fields){
+						if (err)  throw err;
+						res.render('upload', {title: 'ADMIN CORNER', uploadsuccess: 'file upladed'});
 					});
-					form.emit( 'fileBegin', name, file );
-		});
+				});
+			});
+			form.emit('fileBegin', name, file);
+	    });
 	}
 });
+
+
+//Passport login
+passport.serializeUser(function(user_id, done){
+  done(null, user_id)
+});
+        
+passport.deserializeUser(function(user_id, done){
+  done(null, user_id)
+});
+
 
 //post the register
 //var normal = require( '../functions/normal.js' );
@@ -212,7 +359,6 @@ router.post('/register', function (req, res, next) {
 	var fullname = req.body.fullname;
 	var code = req.body.code;
 	var phone = req.body.phone;
-	var sponsor = req.body.sponsor;
 
 	var errors = req.validationErrors();
 	if (errors) { 
@@ -238,7 +384,7 @@ router.post('/register', function (req, res, next) {
 						res.render('register', {title: "REGISTRATION FAILED", error: error, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code,  sponsor: sponsor});
             		}else{
 						bcrypt.hash(password, saltRounds, null, function(err, hash){
-							db.query( 'INSERT INTO user (full_name, phone, username, email, code, password, verification)(?, ?, ?, ?, ?, ?, ?)', [ fullname, phone, username, email, code, hash, 'no'], function(err, result, fields){
+							db.query( 'INSERT INTO user (full_name, phone, username, email, code, password) VALUES(?,  ?, ?, ?, ?, ?)', [ fullname, phone, username, email, code, hash], function(err, result, fields){
 								if (err) throw err;
 								var success = 'Successful registration';
 								res.render('register', {title: 'REGISTRATION SUCCESSFUL!', success: success});
