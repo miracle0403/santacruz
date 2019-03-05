@@ -1,0 +1,152 @@
+<div class = "container-fluid text-center text-white bg bg-secondary">
+<section class = "container">
+<hr>
+<h3 class = "h3"><b>ADD CATEGORIES</b></h3><hr>
+</section>
+</div>
+<div class = "container-fluid">
+<div class = "row">
+<div class = "col-md-6">
+<h5 class = "h5"><b>ADD NEW PARENT CATEGORY</b></h5>
+	<form method ="POST" action ="/newcat">
+		<div class="container-fluid"> 	
+			<div class="form-group">
+				<label for="category">Category</label>
+				<input type="text" class="form-control" id="newcat" name ="category" placeholder="Enter new category here" required />
+			</div><br>
+			<div class="form-group">
+				<button type="submit" class="btn btn-danger">Submit</button><br><br>
+			</div>
+		</div>
+	</form>
+
+</div>
+<div></div>
+<div class = "col-md-6">
+<h5 class = "h5"><b>ADD NEW CHILD CATEGORY</b></h5>
+<form method ="POST" action ="/addcategory">
+		<div class="container-fluid">
+		<div class = "row">
+		<div class = "col">
+		<div class="form-group">
+		<label for="category">Parent Category</label>
+		</div>
+		<div class="form-group">
+				<select class = "form-control" name = "parent">
+					<option><option>
+					{{#if category}}
+					{{#each category}}
+						<option>{{category_name}}</option>
+						{{/each}}
+					{{/if}}
+				</select>
+		</div>
+		</div>
+		<div class = "col">
+		
+		<div class="form-group">
+			
+				<label for="category">Child Category</label>
+				</div>
+				<div class=" form-group">
+				<input type="text" class="form-control" id="newcat" name ="category" placeholder="Enter category here" required />
+			</div>
+			</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-danger">Submit</button><br><br>
+			</div>
+		</div>
+		</div>
+		
+		</div>
+	
+		
+		</form>
+		<!-- end of first column -->
+	</div>
+
+<!-- end of first row-->
+</div>
+ <div class = "container text-white bg bg-danger">
+ <hr>
+	<h3 class = "h3"><b>ADD NEW PRODUCT<b></h3><hr>
+	</div>
+	<form method ="POST" action ="/upload">
+		<div class="container-fluid"> 	
+		<div class = "form-row">
+			<div class="form-group col-md-6">
+				<label for="category">Category</label>
+				<select class = "form-control" name = "category">
+					<option></option>
+					{{#if category}}
+					{{#each category}}
+						<option>{{category_name}}</option>
+						{{/each}}
+					{{/if}}
+				</select>
+			</div>
+			<div class="form-group col-md-6">
+				<label for="product">Product</label>
+				<input type="text" class="form-control" id="product" name ="product" placeholder="Enter product here" required />
+			</div>
+			</div>
+			<div class = "form-row">
+			<div class="form-group col-md-6">
+				<label for="price">Price</label>
+				<input type="text" class="form-control" id="Picture" name ="price" value="Contact for price" required />
+			</div>
+			<div class="form-group col-md-6">
+				<label for="img">Product Image</label>
+				<input type="file" class="form-control-file" id="Picture" name ="img" placeholder="Click here" required />
+			</div>
+			</div>
+			<div class="form-group">
+				<label for="description">Product Description</label>
+				<textarea class="form-control" id="description" rows = "6" name ="description" placeholder="Enter description here"></textarea>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-secondary">Submit</button><br><br>
+			</div>
+		</div>
+		</form>
+		<div class = "row">
+		<div class = "col-md-6">
+		<div class = "container text-white bg bg-danger text-center">
+		<hr>
+		<h3><b>UPDATE PRODUCT STATUS</b></h3><hr>
+		</div>
+		<form method ="POST" action ="/status">
+		<div class="container-fluid"> 	
+			<div class="form-group">
+				<label for="product">Product_id</label>
+				<input type="number" class="form-control" id="product_id" name ="product_id" placeholder="Enter product_id" required />
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-secondary">Submit</button>
+				</div>
+		</div>
+	</form>
+		</div>
+		<div class = "col-md-6">
+		<div class = "container text-white
+	 bg bg-secondary text-center">
+		<hr>
+		<h3 class = "h3"><b>SEARCH PRODUCT</b></h3><hr>
+		</div>
+		
+	<form method ="POST" action ="/searchproduct">
+		<div class="container-fluid"> 	
+			<div class="form-group">
+				<label for="product">Product_id</label>
+				<input type="number" class="form-control" id="product_id" name ="product_id" placeholder="Enter product_id" required />
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-danger">Submit</button><br><br>
+			</div>
+		</div>	
+	
+	</form>
+		</div>
+		</div>
+			
