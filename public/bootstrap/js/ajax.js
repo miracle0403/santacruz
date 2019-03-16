@@ -31,5 +31,18 @@ $( document ).ready( function ( ){
 	});
 	//something else.... another function should go here.
 	
+	$( '#jss' ).hide( );
+	$( '#sss' ).hide( );
 	
+	$('#classes').change(function(){
+		var classes = this;
+		alert(classes)
+		/*if(classes === 'JSS'){
+			$( '#jss' ).show();
+			$( '#sss' ).hide();
+		}if (classes === 'SSS'){
+			$( '#jss' ).hide();
+			$( '#sss' ).show();
+		}*/
+	});
 });

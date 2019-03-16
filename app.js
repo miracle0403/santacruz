@@ -28,6 +28,7 @@ var MySQLStore = require ('express-mysql-session')(session);
 var flash = require('express-flash-messages');
 var db = require('./db.js'); 
 var hbs  = require('hbs');
+var tables = require('./tables.js');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //var paginate = require('express-handlebars-paginate');
@@ -60,7 +61,7 @@ var options = {
   host: "localhost",
   user: "root",
   //password: 'ifeysamuel',
-  database: "ifeysamuel"
+  database: "school"
 };
 
 app.use(myConnection(mysql, options, 'pool')); 

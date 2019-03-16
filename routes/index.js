@@ -20,15 +20,7 @@ function rounds( err, results ){
 const saltRounds = bcrypt.genSalt( 10, rounds);
 
 
-//adminfunction
-function admin(x, y, j){
-	y.query('SELECT user FROM admin WHERE user = ?', [x], function(err, results, fields){
-		if(err) throw err;
-		if(results.length === 0){
-			j.redirect('/404');
-		}
-	});
-}
+
 
 //get home 
 router.get('/',  function(req, res, next) {
@@ -115,14 +107,38 @@ router.get('/page=:page', function ( req, res, next ){
 router.get('/admin', ensureLoggedIn('/login'), function(req, res, next) {
 	//get the category.
 	var currentUser = req.session.passport.user.user_id;
-	admin(currentUser, db, res);
-	db.query('SELECT category_name FROM category', function(err, results, fields){
+	db.query('SELECT user FROM admin WHERE user = ?', [currentUser], function(err, results, fields){
 		if(err) throw err;
-		var category = results;
-		res.render('upload', {title: 'ADMIN CORNER', category: category});
+		if(results.length === 0){
+			res.redirect('/404');
+		}else{
+			var admin = currentUser;
+			res.render('upload', {admin: admin, title: 'ADMIN CORNER'});
+		}
 	});
 });
 
+router.get('/staff', ensureLoggedIn('/login'), function(req, res, next) {
+	//get the category.
+	var currentUser = req.session.passport.user.user_id;
+	db.query('SELECT user FROM staff WHERE user = ?', [currentUser], function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			db.query('SELECT user FROM admin WHERE user = ?', [currentUser], function(err, results, fields){
+				if(err) throw err;
+				if(results.length === 0){
+					res.redirect('/404');
+				}else{
+					var admin = currentUser;
+					res.render('staff', {admin: admin, title: 'ADD RESULT'});
+				}
+			});
+		}else{
+			var staff = currentUser;
+			res.render('staff', {staff: staff, title: 'ADD RESULT'});
+		}
+	});
+});
 
 //get login
 router.get('/login', function(req, res, next) {  
@@ -221,10 +237,18 @@ router.post('/addadmin', function (req, res, next) {
 			db.query('SELECT user FROM admin WHERE user = ?', [user], function(err, results, fields){
 				if( err ) throw err;
 				if( results.length === 0 ){
-					db.query('INSERT INTO admin ( user ) values( ? )', [user], function(err, results, fields){
+					db.query('SELECT user FROM staff WHERE user = ?', [user], function(err, results, fields){
 						if( err ) throw err;
-						var success = 'New Admin Added Successfully!';
-						res.render('upload', {addsuccess: success });
+						if(results.length === 0){
+							db.query('INSERT INTO admin ( user ) values( ? )', [user], function(err, results, fields){
+								if( err ) throw err;
+								var success = 'New Admin Added Successfully!';
+								res.render('upload', {addsuccess: success });
+							});
+						}else{
+							var error = 'This user is already an Admin . Remove user from admin and try again';
+							res.render('upload', {adderror: error });
+						}
 					});
 				}
 				if( results.length > 0 ){
@@ -236,9 +260,74 @@ router.post('/addadmin', function (req, res, next) {
 	});
 });
 
+//add new admin
+router.post('/addstaff', function (req, res, next) {
+	var user = req.body.user;
+	db.query('SELECT user_id, username FROM user WHERE user_id = ?', [user], function(err, results, fields){
+		if( err ) throw err;
+		if ( results.length === 0){
+			var error = 'Sorry this user does not exist.';
+			res.render('upload', {addstafferror: error });
+		}
+		else{
+			db.query('SELECT user FROM staff WHERE user = ?', [user], function(err, results, fields){
+				if( err ) throw err;
+				if( results.length === 0 ){
+					db.query('SELECT user FROM admin WHERE user = ?', [user], function(err, results, fields){
+						if( err ) throw err;
+						if(results.length === 0){
+							db.query('INSERT INTO staff ( user ) values( ? )', [user], function(err, results, fields){
+								if( err ) throw err;
+								var success = 'New Admin Added Successfully!';
+								res.render('upload', {addstaffsuccess: success });
+							});
+						}else{
+							var error = 'This user is already a staff . Remove user from staff and try again';
+							res.render('upload', {addstafferror: error });
+						}
+					});
+				}
+				if( results.length > 0 ){
+					var error = 'This user is already an Admin';
+					res.render('upload', {addstafferror: error });
+				} 
+			});
+		}
+	});
+});
+
 
 //delete admin
-router.post('/deladmin', function (req, res, next) {
+router.post('/delstaff', function (req, res, next) {
+	var user = req.body.user;
+	db.query('SELECT user_id, username FROM user WHERE user_id = ?', [user], function(err, results, fields){
+		if( err ) throw err;
+		if ( results.length === 0){
+			var error = 'Sorry this user does not exist.';
+			res.render('upload', {adminerror: error });
+		}
+		else{
+			db.query('SELECT user FROM staff WHERE user = ?', [user], function(err, results, fields){
+				if( err ) throw err;
+				if( results.length === 0 ){
+					var error = 'Sorry this staff does not exist.';
+					res.render('upload', {adminerror: error });
+				}
+				else {
+					db.query('DELETE FROM staff WHERE user = ?', [user], function(err, results, fields){
+						if( err ) throw err;
+						var success = 'Staff deleted successfully!'
+						res.render('upload', {adminsuccess: success });
+					});
+				}
+			});
+		}
+	});
+});
+
+
+//delete admin
+router.post('/delstaff', function (req, res, next) {
 	var user = req.body.user;
 	db.query('SELECT user_id, username FROM user WHERE user_id = ?', [user], function(err, results, fields){
 		if( err ) throw err;
@@ -264,6 +353,7 @@ router.post('/deladmin', function (req, res, next) {
 		}
 	});
 });
+
 
 //post add category 
 router.post('/addcategory',  function(req, res, next) {
@@ -365,7 +455,7 @@ router.post('/register', function (req, res, next) {
 	
 		console.log(JSON.stringify(errors));
   
-		res.render('register', { title: 'REGISTRATION FAILED', errors: errors, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code, sponsor: sponsor});
+		res.render('register', { title: 'REGISTRATION FAILED', errors: errors, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code});
 	}else{
 		db.query('SELECT username FROM user WHERE username = ?', [username], function(err, results, fields){
           	if (err) throw err;
@@ -373,7 +463,7 @@ router.post('/register', function (req, res, next) {
           	if(results.length===1){
           		var error = "Sorry, this username is taken";
 				console.log(error);
-				res.render('register', {title: "REGISTRATION FAILED", error: error, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code,  sponsor: sponsor});
+				res.render('register', {title: "REGISTRATION FAILED", error: error, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code});
           	}else{
 				//check the email
 				db.query('SELECT email FROM user WHERE email = ?', [email], function(err, results, fields){
@@ -381,7 +471,7 @@ router.post('/register', function (req, res, next) {
           			if(results.length===1){
           				var error = "Sorry, this email is taken";
             			console.log(error);
-						res.render('register', {title: "REGISTRATION FAILED", error: error, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code,  sponsor: sponsor});
+						res.render('register', {title: "REGISTRATION FAILED", error: error, username: username, email: email, phone: phone, password: password, cpass: cpass, fullname: fullname, code: code});
             		}else{
 						bcrypt.hash(password, saltRounds, null, function(err, hash){
 							db.query( 'INSERT INTO user (full_name, phone, username, email, code, password) VALUES(?,  ?, ?, ?, ?, ?)', [ fullname, phone, username, email, code, hash], function(err, result, fields){
