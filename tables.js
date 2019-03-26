@@ -1,6 +1,6 @@
 var db = require('./db.js');
 
-/*db.query('CREATE TABLE IF NOT EXISTS students (reg_no varchar(255) NOT NULL, DOB DATE NULL, full_name varchar(255) NOT NULL, passport varchar(255) NOT NULL, Class varchar(255) NOT NULL,  date_admitted DATE NOT NULL, performance varchar(255) NOT NULL, Guardian varchar(255) NOT NULL, title varchar(255)  NOT NULL, guardian_phone BIGINT NOT NULL, student_phone BIGINT NULL, guardian_email varchar(255) NOT NULL, student_email varchar(255) NULL, guardian_STO varchar(255) NOT NULL, student_STO varchar(255) NOT NULL, guardian_address varchar(255) NOT NULL, student_address varchar(255) NOT NULL, guardian_occupation varchar(255) NOT NULL, student_madien_name varchar(255) NOT NULL', function(err, results){
+/*db.query('CREATE TABLE IF NOT EXISTS students (reg_no varchar(255) NOT NULL, DOB DATE NULL, full_name varchar(255) NOT NULL, passport varchar(255) NOT NULL, Class varchar(255) NOT NULL,  date_admitted DATE NOT NULL, performance varchar(255) NOT NULL, Guardian varchar(255) NOT NULL, title varchar(255)  NOT NULL, guardian_phone BIGINT NOT NULL, student_phone BIGINT NULL, guardian_email varchar(255) NOT NULL, student_email varchar(255) NULL, sex varchar(255) NOT NULL, guardian_STO varchar(255) NOT NULL, student_STO varchar(255) NOT NULL, guardian_address varchar(255) NOT NULL, student_address varchar(255) NOT NULL, guardian_occupation varchar(255) NOT NULL, student_madien_name varchar(255) NOT NULL', function(err, results){
 	if (err) throw err;
 	console.log('students table created');
 });

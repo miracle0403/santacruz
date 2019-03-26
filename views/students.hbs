@@ -1,41 +1,157 @@
 {{> slide}}
-<div class = "text-secondary text-center" style = "background-color: lightblue"><hr>
-        <h4 style="text-align: center"><b>{{title}}</b></h4><hr>
-</div>
-
-<div class = "container-fluid">
 <br>
-	
-	<form action = "/students" enctype="multipart/form-data" method = "post">
-		<h5 style="text-align: center"><b>STUDENT'S BIO DATA</b></h5>
-		<div class = "form-row">
-			<div class = "form-group col-md-4">
-				<label for = "full_name">Full Name</label>
-				<input type="text" class="form-control" id="full_name" name ="full_name" placeholder="Enter Student's full name"   required />
-			</div>
-			<div class = "form-group col-md-4">
-				<label for = "dob">DATE OF BIRTH</label>
-				<input type = "date" class="form-control" id="dob" name ="dob" required />
-			</div>
-			<div class = "form-group col-md-4">
+
+<form action = "/students" enctype="multipart/form-data" class = "container-fluid" method = "post">
+	<div class = "bg-secondary container"><hr>
+		<h5 class ="text-center text-dark" style = "background-color: lightblue"><b>STUDENT'S BIO DATA</b></h5><hr>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "full_name">Full Name</label>
+			<input type="text" class="form-control" id="full_name" name ="full_name" placeholder="Enter Student's full name"   required />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "dob">Date Of Birth</label>
+			<input type="date" class="form-control" id="dob" name ="dob" value ="IF YOU SEE THIS, CHANGE OR UPGRADE YOUR BROWSER" required />
+		</div>
+		<div class = "form-group col-md-4">
 				<label for = "Passport"> Passport</label>
 				<input type="file" class="form-control-file" id="passport" name ="passport"   required />
-			</div>
 		</div>
-		
-		<div class = "form-row">
-			<div class = "form-group col-md-4">
-				<label for = "reg_no"> Registration Number</label>
-				<input type="text" class="form-control" id="reg_no" name ="reg_no" placeholder="Enter reg_no"   required />
-			</div>
-			
-			<div class = "form-group col-md-4">
-				<label for = "admitted">Date Admitted</label>
-				<input type= "date" class="form-control" id="passport" name ="date_admitted"   required />
-			</div>
-			
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "gender">Gender</label>
+			<select class="form-control" id="gender" name ="gender"/>
+				<option></option>
+				<option>Male</option>
+				<option>Female</option>
+			</select>
 		</div>
-		
-	</form>
-	
-</div>
+		<div class = "form-group col-md-4">
+			<label for = "nationality">Nationality</label>
+			<input type="text" class="form-control" id="nationality" name ="nationality" placeholder  = "Enter Nationality" required />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "sto">State Of Origin</label>
+			<input type="text" class="form-control" id="sto" name ="sto" placeholder  = "Enter State Of Origin" required />
+		</div>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "phone">Phone Number</label>
+			<input type="tel" class="form-control" id="phone" name ="tel" placeholder  = "Enter Student's Phone Number" />
+		</div>
+		<div class = "form-group col-md-8">
+			<label for = "address">Address</label>
+			<input type="text" class="form-control" id="address" name ="address" placeholder  = "Enter Student's Address" />
+		</div>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "mother">Mother's Maiden Name</label>
+			<input type="text" class="form-control" id="mmn" name ="mmn" placeholder  = "Enter Mother's Maiden Name" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "parent">Parent/Guardian Name</label>
+			<input type="text" class="form-control" id="parent_name" name ="parent_name" placeholder  = "Example Mr & Mrs Parent" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "relationship">Relationship</label>
+			<input type="text" class="form-control" id="relationship" name ="relationship" placeholder  = "Example Parent" />
+		</div>
+	</div>
+	<div class = "bg-secondary container"><hr>
+		<h5 class ="text-center" style = "background-color: lightblue"><b>PARENT/GUARDIAN'S BIO DATA</b></h5><hr>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "full_name">Full Name</label>
+			<input type="text" class="form-control" id="full_name" name ="full_name" placeholder  = "Enter Full Name" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "phone">Phone</label>
+			<input type="tel" class="form-control" id="guardian_phone" name ="guardian_phone" placeholder  = "Enter Guardian's Phone Number" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "email">Email</label>
+			<input type="email" class="form-control" id="email" name ="email" placeholder  = "Enter Guardian's email" />
+		</div>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "Religion">Religion</label>
+			<input type="text" class="form-control" id="religion" name ="religion" placeholder  = "Enter Guardian's Religion" />
+		</div>
+		<div class = "form-group col-md-8">
+			<label for = "Address">Address</label>
+			<input type="text" class="form-control" id="guardian_address" name ="guardian_address" placeholder  = "Enter Guardian's Address" />
+		</div>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "status">Guardian's Marital Status</label>
+			<select name = "guardian_status" id = "guardian_status" class = "form-control">
+				<option></option>
+				<option>Single</option>
+				<option>Married</option>
+				<option>Divorced</option>
+				<option>Widowed</option>
+			</select>
+		</div>
+		<div class = "form-group col-md-4" id = "occupation">
+			<label for = "occupation">Occupation</label>
+			<input type="text" class="form-control" id="occupation" name ="occupation" placeholder = "Enter Guardian's Occupation" required />
+		</div>
+		<div class = "alert alert-danger" id = "annError"></div>
+		<div class = "form-group col-md-4" id = "anniversary">
+			<label for = "anniversary">Marriage Date</label>
+			<input type="date" class="form-control" id="anniversary_date" name ="anniversary" value ="IF YOU SEE THIS, CHANGE OR UPGRADE YOUR BROWSER" required />
+		</div>
+	</div>
+	<div class = "bg-secondary container"><hr>
+		<h5 class ="text-center" style = "background-color: lightblue"><b>STUDENT'S ADMISSION INFORMATION</b></h5><hr>
+	</div>
+	<div class = "form-row">
+		<div class = "form-group col-md-4">
+			<label for = "Class_Admitted">Class Admitted</label>
+			<input type="text" class="form-control" id="class_admitted" name ="class_admitted" placeholder  = "Enter Class Admitted" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "Class_Admitted">Class Admitted</label>
+			<input type="text" class="form-control" id="class_admitted" name ="class_admitted" placeholder  = "Enter Class Admitted" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "performance">Performance</label>
+			<input type="text" class="form-control" id="performance" name ="performance" placeholder  = "Enter Performance" />
+		</div>
+	</div>
+	<div class = "form-row" id = "schools">
+		<div class = "form-group col-md-4">
+			<label for = "School_attended">School Attended</label>
+			<input type="text" class="form-control" id="school_name" name ="school_name" placeholder  = "School Name" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "year_attented">Year Attended</label>
+			<input type="text" class="form-control" id="year_attented" name ="year_attented" placeholder  = "Enter Year Attended" />
+		</div>
+		<div class = "form-group col-md-4">
+			<label for = "class">Class</label>
+			<input type="text" class="form-control" id="school_class" name ="school_class" placeholder  = "Enter School Class" />
+		</div>
+	</div><br>
+	<button type = "button" style = "background-color: lightblue" id  = "add_schools">Add School</button><br><br>
+	<div class = "form-row">
+		<div class = "form-group col-md-6">
+			<label for = "reg_no">Reg No</label>
+			<input type="text" class="form-control" id="reg_no" name ="reg_no" placeholder  = "Enter Registration Number" />
+		</div>
+		<div class = "form-group col-md-6">
+			<label for = "year_of_admission">Year Of Admission</label>
+			<input type="text" class="form-control" id="year_of_admission" name ="year_of_admission" placeholder  = "Enter the Year Of Admission here" />
+		</div>
+	</div>
+	<div class = "form-group">
+		<button class = "btn btn-secondary" type = "submit">Submit</submit>
+	</div>
+</form>

@@ -50,7 +50,8 @@ $( document ).ready( function ( ){
 		}
 	});
 	
-	
+	$( '#anniversary' ).hide( );
+	$( '#annError' ).hide( );
 	
 	//the code for multipling the ss subjects
 	$('#sssAdd').click(function(){
@@ -64,5 +65,27 @@ $( document ).ready( function ( ){
 		var itm = document.getElementById("JaddSub");
 		var cln = itm.cloneNode(true);
 		$('#JaddSub').after(cln);
+	});
+	
+	$('#guardian_status').change(function(){
+		var status = this.value;
+		if( status === 'Married'){
+			$( '#anniversary' ).show();
+			/*var ann = $('#anniversary_date').value;
+			if( ann === ''){
+				alert(ann)
+				$( '#annError' ).show();
+				var error = 'Marriage anniversary date can not be empty';
+				$('#annError').html(error);
+			}*/
+		}else{
+			$( '#anniversary' ).hide( );
+		}
+	});
+	
+	$('#add_schools').click(function(){
+		var itm = document.getElementById("schools");
+		var cln = itm.cloneNode(true);
+		$('#schools').after(cln);
 	});
 });
