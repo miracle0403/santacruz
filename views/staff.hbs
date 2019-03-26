@@ -13,9 +13,509 @@
 	</div>
 </div>
 
-<div id = "jss">
-cvhcxvkcx   jss
-</div>
+<form action = "/uploadresult" method = "post">
+	<div id = "jss" class = "container-fluid">
+		<div class = "form-row">
+			<div class = "form-group col-md-6">
+				<label for = "reg_no"> Registration Number</label>
+				<input type="text" class="form-control" id="reg_no" name ="reg_no" placeholder="Enter reg_no" required />
+			</div>
+			<div class = "form-group col-md-6">
+				<label for = "class">Class</label>
+				<select class = "form-control" name = "class">
+					<option></option>
+					<option>JSS 1</option>
+					<option>JSS 2</option>
+					<option>JSS 3</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class = "form-row">
+			<div class = "form-group col-md-6">
+				<label for = "session">Academic Session</label>
+				<input type="text" class="form-control" id="session" name ="session" placeholder="Enter Academic Session here" required />
+			</div>
+			<div class = "form-group col-md-6">
+				<label for = "term">Term</label>
+				<select class = "form-control" name = "class">
+					<option></option>
+					<option>1<sup>st</sup> Term</option>
+					<option>2<sup>nd</sup> Term</option>
+					<option>3<sup>rd</sup> Term</option>
+				</select>
+			</div>
+		</div>
+		<!-- here fill in all subjects -->
+		<br>
+		
+		<h5 class = " h5 container text-center text-secondary"><b>SUBJECTS</b></h5><br>
+		<div id = "JaddSub">
+			<div class = "form-row">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss1" name ="sub1" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade1">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div>
+			<br><br>
+			<div class = "form-row" id = "j2">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub2" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div id = "j21" class = "form-row">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div>
+			<br><br>
+			<div id = "j3" class = "form-row">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div id = "j31" class = "form-row">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div>
+			<br><br>
+			<div class = "form-row" id = "j4">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j41">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div class = "form-row" id = "j5">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j51">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div id = "j6" class = "form-row">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j61">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div class = "form-row" id = "j7">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j71">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div class = "form-row" id = "j8">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j81">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div class = "form-row" id = "j9">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j91">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div class = "form-row" id = "j10">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j101">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div><br><br>
+			<div class = "form-row" id = "j111">
+				<div class = "form-group col-md-4">
+					<label for = "subject">Subjects</label>
+					<input type="text" class="form-control" id="subjss" name ="sub" required />
+				</div>
+				<div class = "form-group col-md-4">
+					<label for = "grade">Grade</label>
+					<select class = "form-control" name = "grade">
+						<option></option>
+						<option>A</option>
+						<option>B</option>
+						<option>C</option>
+						<option>D</option>
+						<option>E</option>
+						<option class = text-danger">F</option>
+					</select>
+				</div>
+				
+				<div class = "form-group col-md-4">
+					<label for = "class_Position">Position</label>
+					<input type="text" class="form-control" id="classPosition" name ="ClassPosition" required />
+				</div>
+			</div>
+			<div class = "form-row" id = "j11">
+				<div class = "form-group col-md-4">				
+					<label for = "CA">C.A</label>
+					<input type="number" class="form-control" id="ca" name ="CA" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "exam">Exam</label>
+					<input type="number" class="form-control" id="exam" name ="exam" required />
+				</div>
+				<div class = "form-group col-md-4">				
+					<label for = "subjectTotal">Total</label>
+					<input type="number" class="form-control" id="subjectTotal" name ="subjectTotal" required />
+				</div>
+			</div>
+			
+			
+			
+		</div>
+			
+		<!--<div class = "form-group">
+			<button type = "button" id = "jssAdd" class = "form-control btn btn-link">Add Another Subject</button> 
+		</div>-->
+		<br><br>
+		<div class = "form-row">
+			<div class = "form-group col-md-4">				
+				<label for = "Total">Total</label>
+				<input type="number" class="form-control" id="total" name ="total" required />
+			</div>
+			<div class = "form-group col-md-4">				
+				<label for = "aggregate">Exam</label>
+				<input type="number" class="form-control" id="aggregate" name ="aggregate" required />
+			</div>
+			<div class = "form-group col-md-4">				
+				<label for = "Position">Position</label>
+				<input type="text" class="form-control" id="Position" name ="Position" required />
+			</div>
+		</div>
+		<br>
+		<div class = "form-row">
+			<div class = "form-group col-md-6">				
+				<label for = "classTeacher">Class Teacher's Remark</label>
+				<textarea class="form-control" id="classTeacher" name ="classTeacher"></textarea>
+			</div>
+			<div class = "form-group col-md-6">				
+				<label for = "Principal">Principal Remark</label>
+				<textarea class="form-control" id="Principal" name ="Principal"></textarea>
+			</div>
+		</div>
+		<div class = "form-group">
+			<button type = "submit" class = "form-control btn btn-secondary">Upload Result</button> 
+		</div>
+	</div>
+</form>
 
-<div id = "sss">   sss
-</div>
+<form action = "/uploadresult" method = "post">
+	<div id = "sss" class = "container-fluid">
+		<div class = "form-row">
+			<div class = "form-group col-md-6">
+				<label for = "reg_no"> Registration Number</label>
+				<input type="text" class="form-control" id="reg_no" name ="reg_no" placeholder="Enter reg_no" required />
+			</div>
+			<div class = "form-group col-md-6">
+				<label for = "class">Class</label>
+				<select class = "form-control" name = "class">
+					<option>SSS 1</option>
+					<option>SSS 2</option>
+					<option>SSS 3</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</form>

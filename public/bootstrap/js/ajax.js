@@ -35,14 +35,50 @@ $( document ).ready( function ( ){
 	$( '#sss' ).hide( );
 	
 	$('#classes').change(function(){
-		var classes = this;
-		alert(classes)
-		/*if(classes === 'JSS'){
-			$( '#jss' ).show();
-			$( '#sss' ).hide();
-		}if (classes === 'SSS'){
-			$( '#jss' ).hide();
-			$( '#sss' ).show();
-		}*/
+		var classes = this.value;
+		if( classes === 'JSS'){
+			$( '#jss' ).show( );
+			$( '#sss' ).hide( );
+		}
+		if( classes === 'SSS'){
+			$( '#jss' ).hide( );
+			$( '#sss' ).show( );
+		}
+		if( classes === ''){
+			$( '#jss' ).hide( );
+			$( '#sss' ).hide( );
+		}
+	});
+	
+	//function to duplicate the addsub section
+	
+	/*$( '#j2' ).hide();
+	//$( '#j21' ).hide();
+	$( '#j41' ).hide();
+	$( '#j31' ).hide();
+	$( '#j51' ).hide();
+	$( '#j61' ).hide();
+	$( '#j71' ).hide();
+	$( '#j81' ).hide();
+	$( '#j91' ).hide();
+	$( '#j101' ).hide();
+	$( '#j111' ).hide();
+	$( '#j3' ).hide( );
+	$( '#j4' ).hide( );
+	$( '#j5' ).hide( );
+	$( '#j6' ).hide( );
+	$( '#j7' ).hide( );
+	$( '#j8' ).hide( );
+	$( '#j9' ).hide( );
+	$( '#j10' ).hide( );
+	$( '#j11' ).hide( );*/
+	
+	
+	
+	
+	$('#jssAdd').click(function(){
+		var jssSub = $('#Jaddsub');
+		//var itm = jssSub.contains()
+		console.log(jssSub)
 	});
 });

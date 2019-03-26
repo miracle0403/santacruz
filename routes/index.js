@@ -140,6 +140,8 @@ router.get('/staff', ensureLoggedIn('/login'), function(req, res, next) {
 	});
 });
 
+
+
 //get login
 router.get('/login', function(req, res, next) {  
 	const flashMessages = res.locals.getMessages( );
@@ -429,6 +431,19 @@ passport.deserializeUser(function(user_id, done){
 });
 
 
+router.post('/register', function (req, res, next) {
+	req.checkBody('username', 'Username must be between 8 to 25 characters').len(8,25);
+	req.checkBody('fullname', 'Full Name must be between 8 to 25 characters').len(8,25);
+	req.checkBody('pass1', 'Password must be between 8 to 25 characters').len(8,100);
+	req.checkBody('pass2', 'Password confirmation must be between 8 to 100 characters').len(8,100);
+	req.checkBody('email', 'Email must be between 8 to 105 characters').len(8,105);
+	req.checkBody('email', 'Invalid Email').isEmail();
+	req.checkBody('code', 'Country Code must not be empty.').notEmpty();
+	req.checkBody('pass1', 'Password must match').equals(req.body.pass2);
+	req.checkBody('phone', 'Phone Number must be ten characters').len(10);
+});
+
+
 //post the register
 //var normal = require( '../functions/normal.js' );
 router.post('/register', function (req, res, next) {
@@ -486,6 +501,28 @@ router.post('/register', function (req, res, next) {
 		});
 	}
 });
+
+//fix secure pin
+function pinset(amount){
+	var charSet = new securePin.CharSet(); 
+	charSet.addLowerCaseAlpha().addUpperCaseAlpha().addNumeric().randomize();
+	
+	for(var i = 0; i < amount; i++){
+	
+		securePin.generateString(10, charSet, function(str){
+			var pin = 'S' + str + 'SC';
+			securePin.generateString(4, charSet, function(str){
+				var serial = 'ssc' + str;
+				//insert into the database
+				db.query( 'INSERT INTO pins (pin, serial) VALUES(?, ?)', [pin, serial], function(err, result, fields){
+					if (err) throw err;
+				});
+			});
+		});
+	}
+}
+
+//pinset(50)
 
 router.get('/404', function(req, res, next) {
   res.render('404', {title: 'PAGE NOT FOUND', message: 'Ooops  since you got lost somehow but i am here to catch you. see our quick links.'});
