@@ -88,4 +88,39 @@ $( document ).ready( function ( ){
 		var cln = itm.cloneNode(true);
 		$('#schools').after(cln);
 	});
+	
+	$( '#passporterror' ).hide();
+	$( '#passportprogress' ).hide();
+	
+	$(':file#passport').change(function(){
+		var file  =  this.files[0];
+		$( '#passporterror' ).hide();
+		$( '#passportprogress' ).hide();
+		//alert( file.type )
+		var asize = 2 * 1024 * 1024;
+		if(( file.type === 'image/png' || file.type ==='image/jpg' || file.type === 'image/jpeg' ) && file.size <= asize){
+			
+			$( '#passporterror' ).hide();
+			$( '#passportprogress' ).show( );
+			$( '#passportprogress' ).html( 'File is loading........' );
+			var reader = new FileReader( );
+			var img = document.createElement( 'img' );
+			reader.onloadend = function(){
+				img.src  =  reader.result;
+				img.width = 150;
+				img.height = 150;
+			}
+			reader.readAsDataURL( file );
+			$( '#passport' ).after( img );
+			$( '#passportprogress' ).hide( );
+				
+		}else{
+			$( '#passporterror' ).show(  );
+			$( '#passport' ).val('');
+			
+			document .getElementById( 'passporterror' ).innerHTML  = 'File not accepted. Make sure the size is not more than 2mb. Also make sure its either png, jpg or jpeg.' 
+			//alert( 'not ok' )
+		}
+	});
+	
 });

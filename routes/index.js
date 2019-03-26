@@ -260,6 +260,8 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: true
 }));
 
+
+
 //add new admin
 router.post('/addadmin', function (req, res, next) {
 	var user = req.body.user;
@@ -412,41 +414,67 @@ router.post('/addcategory',  function(req, res, next) {
 });
 
 
-router.post('/upload', function(req, res, next) {
+router.post('/students', function(req, res, next) {
 	//var category = req.body.category;
-	if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
+	if (req.url == '/students' && req.method.toLowerCase() == 'post') {
 		// parse a file upload
 		var form = new formidable.IncomingForm();
-		form.uploadDir = '/Users/STAIN/desktop/sites//obionyi/public/images/samples';
+		form.uploadDir = '/Users/STAIN/desktop/sites/sanctacruz/public/images/samples';
 		form.maxFileSize = 2 * 1024 * 1024;
 		form.parse(req, function(err, fields, files) {
 			//var img = fields.img; 
-			var category = fields.category;
-			var price = fields.price;
-			var description = fields.description;
-			var product = fields.product;
+			var fullname = fields.full_name;
+			var sto = fields.sto;
+			var tel = fields.tel;
+			var dob = fields.dob;
+			var gender = fields.gender;
+			var nationality = fields.nationality;
+			var address = fields.address;
+			var mmn = fields.mmn;
+			var parent_name = fields.parent_name;
+			var relationship = fields.relationship;
+			var guardianFullname = fields.guardian_full_name;
+			var guardianPhone = fields.guardian_phone;
+			var guardianEmail = fields.guardian_email;
+			var religion = fields.religion;
+			var guardianAddress = fields.guardian_address;
+			var guardianStatus = fields.guardian_status;
+			var occupation = fields.occupation;
+			var anniversary = fields.anniversary;
+			var classAddmitted = fields.class_admitted;
+			var YearAddmitted = fields.year_admitted;
+			var performance = fields.performance;
+			var schoolName = fields.school_name;
+			var year_attended = fields.year_attended;
+			var schoolClass = fields.school_class;
+			var RegNo = fields.reg_no;
+			var YearOfAdmission = fields.year_of_admission;
+			
 			console.log(fields);
 			var getfiles = JSON.stringify( files );
-			var file = JSON.parse( getfiles );
+			var file = JSON.parse(getfiles);
 			var oldpath = file.img.path;
 			//console.log(oldpath, typeof oldpath, typeof file, file.path, typeof file.path);
-			var name = file.img.name;
+			var name = file.passport.name;
 			form.keepExtensions = true;
-			var newpath = '/Users/STAIN/desktop/sites/obionyi/public/images/samples/' + name;
-			var img = '/images/samples' + name;
+			var newpath = '/Users/STAIN/desktop/sites/sanctacruz/public/images/passport/' + name;
+			var img = '/images/passport' + name;
 			form.on('fileBegin', function( name, file){
 				//rename the file
 				fs.rename(oldpath, newpath, function(err){
 					if (err) throw err;
 					//console.log('file renamed');
 				});
-				//secure pin for code
-				securePin.generatePin(10, function(pin){
 				//save in the database.
-					db.query('INSERT INTO products (image, category, price, product_id, description, product_name, status) VALUES (?, ?, ?, ?, ?, ?, ?)', [img, category, price, pin, description, product, 'in stock'], function(err,results, fields){
+				if(guardianStatus === ''){
+					db.query('INSERT INTO students (passport, full_name, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship, guardian_full_name, guardian_phone, guardian_email, religion, guardian_address, occupation, anniversary, class_admitted, year_admitted, performance, reg_no, year_of_admission) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [name, fullname, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship], function(err,results, fields){
 						if (err)  throw err;
 						res.render('upload', {title: 'ADMIN CORNER', uploadsuccess: 'file upladed'});
 					});
+				}
+				db.query('INSERT INTO products (image, category, price, product_id, description, product_name, status) VALUES (?, ?, ?, ?, ?, ?, ?)', [img, category, price, pin, description, product, 'in stock'], function(err,results, fields){
+					if (err)  throw err;
+					res.render('upload', {title: 'ADMIN CORNER', uploadsuccess: 'file upladed'});
 				});
 			});
 			form.emit('fileBegin', name, file);
@@ -463,6 +491,7 @@ passport.serializeUser(function(user_id, done){
 passport.deserializeUser(function(user_id, done){
   done(null, user_id)
 });
+
 
 router.post('/uploadresult', function (req, res, next) {
 	req.checkBody('reg_no', 'Registration number must be between 6 to 25 characters').len(6,25).trim();

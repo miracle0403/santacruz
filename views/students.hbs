@@ -14,10 +14,13 @@
 			<label for = "dob">Date Of Birth</label>
 			<input type="date" class="form-control" id="dob" name ="dob" value ="IF YOU SEE THIS, CHANGE OR UPGRADE YOUR BROWSER" required />
 		</div>
+		
 		<div class = "form-group col-md-4">
 				<label for = "Passport"> Passport</label>
 				<input type="file" class="form-control-file" id="passport" name ="passport"   required />
 		</div>
+		<div class = "alert alert-danger" id = "passporterror"></div>
+		<div class = "alert alert-info" id = "passportprogress"></div>
 	</div>
 	<div class = "form-row">
 		<div class = "form-group col-md-4">
@@ -67,7 +70,7 @@
 	<div class = "form-row">
 		<div class = "form-group col-md-4">
 			<label for = "full_name">Full Name</label>
-			<input type="text" class="form-control" id="full_name" name ="full_name" placeholder  = "Enter Full Name" />
+			<input type="text" class="form-control" id="full_name" name ="guardian_full_name" placeholder  = "Enter Full Name" />
 		</div>
 		<div class = "form-group col-md-4">
 			<label for = "phone">Phone</label>
@@ -75,7 +78,7 @@
 		</div>
 		<div class = "form-group col-md-4">
 			<label for = "email">Email</label>
-			<input type="email" class="form-control" id="email" name ="email" placeholder  = "Enter Guardian's email" />
+			<input type="email" class="form-control" id="email" name ="guardian_email" placeholder  = "Enter Guardian's email" />
 		</div>
 	</div>
 	<div class = "form-row">
@@ -114,8 +117,8 @@
 	</div>
 	<div class = "form-row">
 		<div class = "form-group col-md-4">
-			<label for = "Class_Admitted">Class Admitted</label>
-			<input type="text" class="form-control" id="class_admitted" name ="class_admitted" placeholder  = "Enter Class Admitted" />
+			<label for = "Year_Admitted">Year Admitted</label>
+			<input type="text" class="form-control" id="year_admitted" name ="year_admitted" placeholder  = "Enter The Year Admitted" />
 		</div>
 		<div class = "form-group col-md-4">
 			<label for = "Class_Admitted">Class Admitted</label>
