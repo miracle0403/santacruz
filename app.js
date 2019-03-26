@@ -69,10 +69,11 @@ app.use(myConnection(mysql, options, 'pool'));
 var sessionStore = new MySQLStore(options);
   
 app.use(session({
-  secret: 'keybaby',
+  secret: 'keybabybbmnb',
   resave: false,
   store: sessionStore,
   saveUninitialized: false,
+  name: 'school',
   /**cookie:
     #secure: true**/
   }));

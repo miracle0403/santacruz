@@ -15,7 +15,7 @@ db.query('CREATE TABLE IF NOT EXISTS staff (user INT(11) UNIQUE NOT NULL, date_r
 	console.log('staff table created');
 });
 
-db.query('CREATE TABLE IF NOT EXISTS pins (reg_no INT(11) NULL, pin varchar (255) UNIQUE NOT NULL, serial varchar (255) NOT NULL, times_used INT DEFAULT 0, date_used DATETIME null, date_created DATETIME DEFAULT CURRENT_TIMESTAMP)', function(err, results){
+db.query('CREATE TABLE IF NOT EXISTS pins (reg_no INT(11) NULL, pin varchar (255) UNIQUE NOT NULL, serial varchar (255) NOT NULL, session_used varchar(255) null, term_used varchar(255) null, times_used INT DEFAULT 0, date_used DATETIME null, date_created DATETIME DEFAULT CURRENT_TIMESTAMP)', function(err, results){
 	if (err) throw err;
 	console.log('pin table created');
 });
