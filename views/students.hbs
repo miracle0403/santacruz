@@ -1,6 +1,20 @@
 {{> slide}}
 <br>
-
+{{#showErrors}}
+{{#error}}
+  <div class="alert alert-danger">
+    {{.}}
+  </div>
+{{/error}}
+{{/showErrors}}
+{{#showErrors}}
+{{#success}}
+  <div class="alert alert-success">
+    {{.}}
+  </div>
+{{/success}}
+{{/showErrors}}
+<br>
 <form action = "/students" enctype="multipart/form-data" class = "container-fluid" method = "post">
 	<div class = "bg-secondary container"><hr>
 		<h5 class ="text-center text-dark" style = "background-color: lightblue"><b>STUDENT'S BIO DATA</b></h5><hr>

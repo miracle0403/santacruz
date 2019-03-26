@@ -44,7 +44,14 @@ router.get('/students', ensureLoggedIn('/login'), function(req, res, next){
 			res.redirect('/404');
 		}else{
 			var admin = currentUser;
-			res.render('students', {title: 'ADD NEW STUDENT', admin: admin});
+			var messages = res.locals.getMessages();
+			if( messages.error){
+				res.render('students', {title: 'ADD NEW STUDENT', ShowMessage: true, error: messages.error, admin: admin});
+			}else{
+				if( messages.success){
+					res.render('students', {title: 'ADD NEW STUDENT', ShowMessage: true, success: messages.success, admin: admin});
+				}
+			}
 		}
 	});
 });
@@ -196,10 +203,72 @@ router.get('/register', function(req, res, next) {
     res.render('register',  { title: 'REGISTRATION'});
 });
 
+//check-result get request
+router.post('/check-result', function(req, res, next) {	
+    req.checkBody('reg_no', 'Registration number must be between 6 to 25 characters').len(6,25).trim();
+	req.checkBody('session', 'Session must be between 8 to 25 characters').len(8,25).trim();
+	req.checkBody('term', 'Term must be 3 characters').len(3).trim();
+	req.checkBody('pin', 'Pin must be between 10 to 30 characters').len(10,30).trim().escape();
+	
+	if (errors) { 
+	
+		console.log(JSON.stringify(errors));
+  
+		res.render('checkResult', { title: 'CHECK RESULT FAILED', errors: errors});
+	}
+});
+
+
+//application get request
+router.get('/application', function(req, res, next) {
+	var messages = res.locals.getMessages();
+	var error = 'Nothing to show. Go to search the user first';
+	if( messages.error ){
+		res.render('application', {title: 'EMPTY FORM', ShowMessage: true, error: messages.error});
+	}else{
+		res.render('application', {title: 'EMPTY FORM'});
+	}
+});
+
+//register get request
+router.get('/searchstudents', ensureLoggedIn('/login'), function(req, res, next){
+	var currentUser = req.session.passport.user.user_id;
+	db.query('SELECT user FROM admin WHERE user = ?', [currentUser], function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			 res.redirect('/404');
+		}else{
+			var messages = res.locals.getMessages();
+			if( messages.error){
+				res.render('searchstudents',  { title: 'SEARCH STUDENTS', error: messages.error, ShowMessage: true});
+			}else{
+				if( messages.success){
+					res.render('searchstudents',  { title: 'SEARCH STUDENTS', success: messages.success, ShowMessage: true});
+				}
+			}
+		}
+	});
+});
+
+//register get request
+router.get('/application/regNo=:regNo', function(req, res, next) {	
+	var regNo = req.params.regNo;
+    db.query('SELECT reg_no FROM students1 WHERE reg_no = ?', [regNo], function(err, results, fields){
+		if(err) throw err;
+		var students1 = results[0];
+		db.query('SELECT reg_no FROM students2 WHERE reg_no = ?', [regNo], function(err, results, fields){
+			if(err) throw err;
+			var students2 = results;
+			res.render('application',  { title: 'APPLICATION FORM', students1: students1, students2: students2});
+		});
+	});
+});
+
 //get logout
 router.get('/logout', function(req, res, next) {
   req.logout();
   req.session.destroy();
+  req.flash('notify', 'You are Logged Out');
   res.redirect('/');
 });
 
@@ -223,14 +292,30 @@ router.post('/status', function(req, res, next) {
 });
 
 //post search.
-router.post('/searchproduct', function(req, res, next) {
-	var product_id = req.body.product_id;
+router.post('/searchstudents', function(req, res, next) {
+	req.checkBody('reg_no', 'Registration number must be between 6 to 25 characters').len(6,25).trim();
 	
-	db.query( 'SELECT * FROM products WHERE product_id = ?', [product_id], function ( err, results, fields ){
-		if(err) throw err;
-		var product = results;
-		res.render('upload', {title: 'ADMIN CORNER', searchresults: product});
-	});
+	var errors = req.validationErrors();
+	if (errors) { 
+	
+		console.log(JSON.stringify(errors));
+  
+		res.render('searchstudents', { title: 'SEARCH FAILED', errors: errors});
+	}else{
+		var regNo = req.body.reg_no;
+		//get the student info
+		db.query( 'SELECT * FROM students1 WHERE reg_no = ?', [regNo], function ( err, results, fields ){
+			if(err) throw err;
+			if(resullts.length === 0){
+				var error = regNo + ' is not correct... Please recheck and try again later';
+				req.flash('error', error);
+				res.redirect('/searchstudents');
+			}else{
+				res.flash('success', 'Search completed');
+				res.redirect('/application/regNo=' + regNo);
+			}
+		});
+	}
 });
 
 
@@ -419,7 +504,7 @@ router.post('/students', function(req, res, next) {
 	if (req.url == '/students' && req.method.toLowerCase() == 'post') {
 		// parse a file upload
 		var form = new formidable.IncomingForm();
-		form.uploadDir = '/Users/STAIN/desktop/sites/sanctacruz/public/images/samples';
+		form.uploadDir = '/Users/STAIN/desktop/sites/sanctacruz/public/images/passport';
 		form.maxFileSize = 2 * 1024 * 1024;
 		form.parse(req, function(err, fields, files) {
 			//var img = fields.img; 
@@ -445,7 +530,7 @@ router.post('/students', function(req, res, next) {
 			var YearAddmitted = fields.year_admitted;
 			var performance = fields.performance;
 			var schoolName = fields.school_name;
-			var year_attended = fields.year_attended;
+			var yearAttended = fields.year_attended;
 			var schoolClass = fields.school_class;
 			var RegNo = fields.reg_no;
 			var YearOfAdmission = fields.year_of_admission;
@@ -466,15 +551,45 @@ router.post('/students', function(req, res, next) {
 					//console.log('file renamed');
 				});
 				//save in the database.
-				if(guardianStatus === ''){
-					db.query('INSERT INTO students (passport, full_name, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship, guardian_full_name, guardian_phone, guardian_email, religion, guardian_address, occupation, anniversary, class_admitted, year_admitted, performance, reg_no, year_of_admission) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [name, fullname, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship], function(err,results, fields){
-						if (err)  throw err;
-						res.render('upload', {title: 'ADMIN CORNER', uploadsuccess: 'file upladed'});
-					});
-				}
-				db.query('INSERT INTO products (image, category, price, product_id, description, product_name, status) VALUES (?, ?, ?, ?, ?, ?, ?)', [img, category, price, pin, description, product, 'in stock'], function(err,results, fields){
-					if (err)  throw err;
-					res.render('upload', {title: 'ADMIN CORNER', uploadsuccess: 'file upladed'});
+				//check if the req number has been added before.
+				db.query('SELECT reg_no FROM students1 WHERE reg_no = ?', [regNo], function(err, results, fields){
+					if( err ) throw err;
+					if(results.length > 1){
+						fs.unlink(newpath, function(err){
+							if (err) throw err;
+							console.log('file deleted');
+						});
+						
+						var error = 'The student ' + fullname + ' is already in the database';
+						req.flash('error', error);
+						res.redirect('/students');
+					}else{
+						if(guardianStatus === ''){
+							db.query('INSERT INTO students1 (passport, full_name, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship, guardian_full_name, guardian_phone, guardian_email, religion, guardian_address, occupation, anniversary, class_admitted, year_admitted, performance, reg_no, year_of_admission) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [name, fullname, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship, guardianFullname, guardianPhone, guardianEmail, religion, guardianAddress, occupation, anniversary, classAddmitted, YearAddmitted, performance, regNo, YearOfAdmission], function(err,results, fields){
+								if (err)  throw err;
+								for(var i = 0; i < schoolName.length; i++){
+									db.query('INSERT INTO students2 (reg_no, school_name, year_attended, school_class) VALUES (?, ?, ?, ?)', [regNo, schoolName[i], yearAttended[i], schoolClass[i]], function(err,results, fields){
+										if (err)  throw err;
+									});
+								}
+								var success = 'The new Student '+ fullname + ' was added successfully';
+								req.flash('success', success);
+								res.redirect('/students');
+							});
+						}else{
+							db.query('INSERT INTO students1 (passport,  guardian_status, full_name, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship, guardian_full_name, guardian_phone, guardian_email, religion, guardian_address, occupation, anniversary, class_admitted, year_admitted, performance, reg_no, year_of_admission) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [name, guardianStatus, fullname, sto, tel, dob, gender, nationality, address, mmn, parent_name, relationship, guardianFullname, guardianPhone, guardianEmail, religion, guardianAddress, occupation, anniversary, classAddmitted, YearAddmitted, performance, regNo, YearOfAdmission], function(err,results, fields){
+								if (err)  throw err;
+								for(var i = 0; i < schoolName.length; i++){
+									db.query('INSERT INTO students2 (reg_no, school_name, year_attended, school_class) VALUES (?, ?, ?, ?)', [regNo, schoolName[i], yearAttended[i], schoolClass[i]], function(err,results, fields){
+										if (err)  throw err;
+									});
+								}
+								var success = 'The new Student '+ fullname + ' was added successfully';
+								req.flash('success', success);
+								res.redirect('/students');
+							});
+						}
+					}
 				});
 			});
 			form.emit('fileBegin', name, file);

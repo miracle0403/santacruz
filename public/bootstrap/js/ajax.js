@@ -123,4 +123,7 @@ $( document ).ready( function ( ){
 		}
 	});
 	
+	$('#printForm').click(function(){
+		print()
+	});
 });

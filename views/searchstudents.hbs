@@ -1,0 +1,18 @@
+{{> slide}}
+
+<br>
+{{#showErrors}}
+{{#error}}
+  <div class="alert alert-danger">
+    {{.}}
+  </div>
+{{/error}}
+{{/showErrors}}
+{{#showErrors}}
+{{#success}}
+  <div class="alert alert-success">
+    {{.}}
+  </div>
+{{/success}}
+{{/showErrors}}
+<br>
