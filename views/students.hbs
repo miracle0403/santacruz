@@ -1,0 +1,41 @@
+{{> slide}}
+<div class = "text-secondary text-center" style = "background-color: lightblue"><hr>
+        <h4 style="text-align: center"><b>{{title}}</b></h4><hr>
+</div>
+
+<div class = "container-fluid">
+<br>
+	
+	<form action = "/students" enctype="multipart/form-data" method = "post">
+		<h5 style="text-align: center"><b>STUDENT'S BIO DATA</b></h5>
+		<div class = "form-row">
+			<div class = "form-group col-md-4">
+				<label for = "full_name">Full Name</label>
+				<input type="text" class="form-control" id="full_name" name ="full_name" placeholder="Enter Student's full name"   required />
+			</div>
+			<div class = "form-group col-md-4">
+				<label for = "dob">DATE OF BIRTH</label>
+				<input type = "date" class="form-control" id="dob" name ="dob" required />
+			</div>
+			<div class = "form-group col-md-4">
+				<label for = "Passport"> Passport</label>
+				<input type="file" class="form-control-file" id="passport" name ="passport"   required />
+			</div>
+		</div>
+		
+		<div class = "form-row">
+			<div class = "form-group col-md-4">
+				<label for = "reg_no"> Registration Number</label>
+				<input type="text" class="form-control" id="reg_no" name ="reg_no" placeholder="Enter reg_no"   required />
+			</div>
+			
+			<div class = "form-group col-md-4">
+				<label for = "admitted">Date Admitted</label>
+				<input type= "date" class="form-control" id="passport" name ="date_admitted"   required />
+			</div>
+			
+		</div>
+		
+	</form>
+	
+</div>

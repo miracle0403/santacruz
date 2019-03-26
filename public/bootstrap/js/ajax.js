@@ -50,35 +50,19 @@ $( document ).ready( function ( ){
 		}
 	});
 	
-	//function to duplicate the addsub section
-	
-	/*$( '#j2' ).hide();
-	//$( '#j21' ).hide();
-	$( '#j41' ).hide();
-	$( '#j31' ).hide();
-	$( '#j51' ).hide();
-	$( '#j61' ).hide();
-	$( '#j71' ).hide();
-	$( '#j81' ).hide();
-	$( '#j91' ).hide();
-	$( '#j101' ).hide();
-	$( '#j111' ).hide();
-	$( '#j3' ).hide( );
-	$( '#j4' ).hide( );
-	$( '#j5' ).hide( );
-	$( '#j6' ).hide( );
-	$( '#j7' ).hide( );
-	$( '#j8' ).hide( );
-	$( '#j9' ).hide( );
-	$( '#j10' ).hide( );
-	$( '#j11' ).hide( );*/
 	
 	
+	//the code for multipling the ss subjects
+	$('#sssAdd').click(function(){
+		var itm = document.getElementById("SaddSub");
+		var cln = itm.cloneNode(true);
+		$('#SaddSub').after(cln);
+	});
 	
-	
+	//the code for multipling the jss subjects
 	$('#jssAdd').click(function(){
-		var jssSub = $('#Jaddsub');
-		//var itm = jssSub.contains()
-		console.log(jssSub)
+		var itm = document.getElementById("JaddSub");
+		var cln = itm.cloneNode(true);
+		$('#JaddSub').after(cln);
 	});
 });

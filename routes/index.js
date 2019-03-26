@@ -26,7 +26,6 @@ const saltRounds = bcrypt.genSalt( 10, rounds);
 //get home 
 router.get('/',  function(req, res, next) {
 	var messages = res.locals.getMessages();
-	console.log( messages )
 	if( messages.notify ){
 		console.log( messages.notify );
 		res.render('index', {title: 'SANCTA CRUX', ShowMessage: true, messages: messages.notify});
@@ -37,9 +36,17 @@ router.get('/',  function(req, res, next) {
 });
 
 
-router.get('/redirect', function(req, res){
-	req.flash('notify', 'Redirect successful!');
-	res.redirect('/');
+router.get('/students', ensureLoggedIn('/login'), function(req, res, next){
+	var currentUser = req.session.passport.user.user_id;
+	db.query('SELECT user FROM admin WHERE user = ?', [currentUser], function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			res.redirect('/404');
+		}else{
+			var admin = currentUser;
+			res.render('students', {title: 'ADD NEW STUDENT', admin: admin});
+		}
+	});
 });
 
 //product 
@@ -150,7 +157,19 @@ router.get('/staff', ensureLoggedIn('/login'), function(req, res, next) {
 			});
 		}else{
 			var staff = currentUser;
-			res.render('staff', {staff: staff, title: 'ADD RESULT'});
+			var messages = res.locals.getMessages();
+			if( messages.error ){
+				console.log( messages.error );
+				res.render('staff', {title: 'UPLOAD FAILED', ShowMessage: true, error: messages.error});
+			}else{
+				if( messages.success ){
+					console.log( messages.success );
+					res.render('staff', {title: 'UPLOAD FAILED', ShowMessage: true, error: messages.success});
+				}else{
+					console.log( 'no notify' );
+					res.render('staff', {title: 'UPLOAD RESULT'});
+				}
+			}
 		}
 	});
 });
@@ -445,65 +464,14 @@ passport.deserializeUser(function(user_id, done){
   done(null, user_id)
 });
 
-
 router.post('/uploadresult', function (req, res, next) {
 	req.checkBody('reg_no', 'Registration number must be between 6 to 25 characters').len(6,25).trim();
 	req.checkBody('session', 'Session must be between 8 to 25 characters').len(8,25).trim();
-	req.checkBody('classPosition', 'The first class position must be between 3  characters').len(3).trim().escape();
+	req.checkBody('classPosition', 'The class position must be between 3  characters').len(3).trim().escape();
 	req.checkBody('sub1', 'The First subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
 	req.checkBody('CA', 'The first  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
 	req.checkBody('exam', 'The first Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
 	req.checkBody('subjectTotal', 'The first total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition2', 'The Second class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub2', 'The Second subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA2', 'The Second  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam2', 'The second Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal2', 'The second total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition3', 'The third class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub3', 'The third subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA3', 'The third  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam3', 'The third Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal3', 'The third total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition4', 'The fourth class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub4', 'The fourth subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA4', 'The fourth  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam4', 'The fourth Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal4', 'The fourth total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition5', 'The fifth class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub5', 'The fifth subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA5', 'The fifth  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam5', 'The fifth Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal5', 'The fifth total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition6', 'The sixth class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub6', 'The sixth subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA6', 'The sixth  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam6', 'The sixth Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal6', 'The sixth total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition7', 'The seventh class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub7', 'The seventh subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA7', 'The seventh  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam7', 'The seventh Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal7', 'The seventh total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition8', 'The eighth class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub8', 'The eighth subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA8', 'The eighth  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam8', 'The eighth Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal8', 'The eighth total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition9', 'The ninth class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub9', 'The ninth subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA9', 'The ninth  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam9', 'The ninth Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal9', 'The ninth total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition10', 'The tenth class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub10', 'The tenth subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA10', 'The tenth  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam10', 'The tenth Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal10', 'The tenth total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
-	req.checkBody('classPosition11', 'The eleventh class position must be between 3  characters').len(3).trim().escape();
-	req.checkBody('sub11', 'The eleventh subject in this page should be at least 3 chararcters and a maximun of 50 characters').len(3,100).trim().escape();
-	req.checkBody('CA11', 'The eleventh  CA should be between 1 to 2 numbers').len(1,2).isNumber().trim().escape();
-	req.checkBody('exam11', 'The eleventh Exam  must be between 1 to 2 Numbers').len(1,2).trim().isNumber().escape();
-	req.checkBody('subjectTotal11', 'The eleventh total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
 	req.checkBody('total', 'Total must be between 1 to 3 Numbers').len(1,3).isNumber().trim().escape();
 	req.checkBody('aggregate', 'The Aggregate must be between 1 to 4 Numbers').len(1,4).isNumber().trim().escape();
 	req.checkBody('position', 'The position must be between 1 to 3 characters').len(1,3).trim().escape();
@@ -512,127 +480,68 @@ router.post('/uploadresult', function (req, res, next) {
 	req.checkBody('principal', 'The Principal remark must be between 10 to 100 Numbers').len(10,100).trim().escape();
 	req.checkBody('classTeacher', 'The Class Teacher must be between 10 to 100 characters').len(10,100).trim().escape();
 	
-	var regNo = req.body.reg_no;
-	var session = req.body.session;
-	var classPosition = classPosition;
-	var sub1 = req.body.sub1;
-	var CA = req.body.CA;
-	var exam = req.body.exam;
-	var subjectTotal = req.body.subjectTotal;
-	var classPosition2 = classPosition2;
-	var sub2 = req.body.sub2;
-	var CA2 = req.body.CA2;
-	var exam2 = req.body.exam2;
-	var subjectTotal2 = req.body.subjectTotal2;
-	var classPosition3 = classPosition3;
-	var sub3 = req.body.sub3;
-	var CA3 = req.body.CA3;
-	var exam3 = req.body.exam3;
-	var subjectTotal3 = req.body.subjectTotal3;
-	var classPosition4 = classPosition4;
-	var sub4 = req.body.sub4;
-	var CA4 = req.body.CA4;
-	var exam4 = req.body.exam4;
-	var subjectTotal4 = req.body.subjectTotal4;
-	var classPosition5 = classPosition5;
-	var sub5 = req.body.sub5;
-	var CA5 = req.body.CA5;
-	var exam5 = req.body.exam5;
-	var subjectTotal5 = req.body.subjectTotal5;
-	var classPosition6 = classPosition6;
-	var sub6 = req.body.sub6;
-	var CA6 = req.body.CA6;
-	var exam6 = req.body.exam6;
-	var subjectTotal6 = req.body.subjectTotal6;
-	var classPosition7 = classPosition7;
-	var sub7 = req.body.sub7;
-	var CA7 = req.body.CA7;
-	var exam7 = req.body.exam7;
-	var subjectTotal7 = req.body.subjectTotal7;
-	var classPosition8 = classPosition8;
-	var sub8 = req.body.sub8;
-	var CA8 = req.body.CA8;
-	var exam8 = req.body.exam8;
-	var subjectTotal8 = req.body.subjectTotal8;
-	var classPosition9 = classPosition9;
-	var sub9 = req.body.sub9;
-	var CA9 = req.body.CA9;
-	var exam9 = req.body.exam9;
-	var subjectTotal9 = req.body.subjectTotal9;
-	var classPosition10 = classPosition10;
-	var sub10 = req.body.sub10;
-	var CA10 = req.body.CA10;
-	var exam10 = req.body.exam10;
-	var subjectTotal10 = req.body.subjectTotal10;
-	var classPosition11 = classPosition11;
-	var sub11 = req.body.sub11;
-	var CA11 = req.body.CA11;
-	var exam11 = req.body.exam11;
-	var subjectTotal11 = req.body.subjectTotal11;
-	var total = req.body.total;
-	var aggregate = req.body.aggregate;
-	var position = req.body.position;
-	var principal = req.body.principal;
-	var classTeacher = req.body.classTeacher;
-	var term = req.body.term;
-	var Class = req.body.Class;
-	var grade1 = req.body.grade1;
-	var grade2 = req.body.grade2;
-	var grade3 = req.body.grade3;
-	var grade4 = req.body.grade4;
-	var grade5 = req.body.grade5;
-	var grade6 = req.body.grade6;
-	var grade7 = req.body.grade7;
-	var grade8 = req.body.grade8;
-	var grade9 = req.body.grade9;
-	var grade10 = req.body.grade10;
-	var grade11 = req.body.grade11;
-	
-	var sujects = [sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11];
-	var grades = [grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, grade11];
-	var exams = [exam, exam2, exam3, exam4, exam5, exam6, exam7, exam8, exam9, exam10, exam11];
-	var CAs = [CA, CA2, CA3, CA4, CA5, CA6, CA7, CA8, CA9, CA10, CA11];
-	var subjectsTotal = [subjectTotal, subjectTotal2, subjectTotal3, subjectTotal4, subjectTotal5, subjectTotal6, subjectTotal7, subjectTotal8, subjectTotal9, subjectTotal10, subjectTotal11];
-	var classPositions = [classPosition, classPosition2, classPosition3, classPosition4, classPosition5, classPosition6, classPosition7, classPosition8, classPosition9, classPosition10, classPosition11];
-	
-	
-
 	var errors = req.validationErrors();
 	if (errors) { 
 	
 		console.log(JSON.stringify(errors));
-  
-		res.render('staff', { title: 'UPLOAD UNSUCCESSFUL', errors: errors});
+		
+		res.render('staff', { title: 'UPLOAD FAILED', errors: errors});
 	}else{
+		var regNo = req.body.reg_no;
+		var session = req.body.session;
+		var classPosition = classPosition;
+		var sub1 = req.body.sub1;
+		var CA = req.body.CA;
+		var exam = req.body.exam;
+		var subjectTotal = req.body.subjectTotal;
+		var total = req.body.total;
+		var aggregate = req.body.aggregate;
+		var position = req.body.position;
+		var principal = req.body.principal;
+		var classTeacher = req.body.classTeacher;
+		var term = req.body.term;
+		var Class = req.body.Class;
+		var grade1 = req.body.grade1;
+		
+		console.log(sub1);
+		
 		//check if the result has been uploaded before now.
 		db.query('SELECT reg_no FROM result1 WHERE reg_no = ? and term = ? and session = ? and class = ?', [regNo, term, session, Class], function(err, results, fields){
 			if (err) throw err;
 			if(results.length > 0){
 				var error = 'Its seems you have uploaded this result before';
-				res.render('staff', { title: 'UPLOAD UNSUCCESSFUL', error: error});
+				req.flash('error', error);
+				res.redirect('/staff');
 			}else{
 				//get the full name.
-				db.query('SELECT full_name FROM students WHERE reg_no = ?', [regNo], function(err, results, fields){
+				db.query('SELECT full_name, DOB FROM students WHERE reg_no = ?', [regNo], function(err, results, fields){
 					if (err) throw err;
 					if(results.length === 0){
 						var error = 'This registration number does not exist in the database.';
-						res.render('staff', { title: 'UPLOAD UNSUCCESSFUL', error: error});
+						req.flash('error', error);
+						res.redirect('/staff');
 					}else{
 						var fullname = results[0].full_name;
+						var DOB = resullts[0].DOB;
+						var thisyear = new Date().getFullYear();
+						var thatyear = DOB.getFullYear();
+						var age = thatyear - thisyear;
+						console.log(age);
 						//get the staff that uploaded.
 						var currentUser  = req.session.passport.user.user_id;
-						db.query('SELECT full_name FROM users WHERE user_id =  ?', function(err, results, fields){
+						db.query('SELECT full_name FROM user WHERE user_id =  ?', function(err, results, fields){
 							if( err ) throw err;
 							var staff = results[0].full_name;
-						//loop and insert it.
+							//loop and insert it.
 							for(var i  = 0; i < subjects.length; i++){
-								db.query('INSERT INTO result1 (reg_no, full_name, class,  uploaded_by, session, term, subject, grade, CA, position, exam, total) VALUES( ?,?,?,?,?,?,?,?,?,?,?,? )', [regNo, fullname, Class, staff, session, term, subjects[i], grades[i], CAs[i], classPositions[i], exams[i], subjectsTotal[i] ], function( err, results, fields){
+								db.query('INSERT INTO result1 (age, reg_no, full_name, class,  uploaded_by, session, term, subject, grade, CA, position, exam, total) VALUES( ?,?,?,?,?,?,?,?,?,?,?,?,? )', [age, regNo, fullname, Class, staff, session, term, sub1[i], grade1[i], CA[i], classPosition[i], exam[i], subjectTotal[i] ], function( err, results, fields){
 									if( err ) throw err;
 									//enter into the next database which is result2
 									db.query('INSERT INTO result2 (class, reg_no, full_name, uploaded_by, session, term, position, aggregate, total, teachers_remark, principals_remark) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', [Class, regNo, fullname, staff, session, term, position, aggregate, total, principal, classTeacher], function( err, resullts, fields){
 										if( err ) throw err;
 										var success = "Congrats" + staff + ", you have uploaded" + fullname + "'s result successfully";
-										res.render('staff', {title: 'UPLOAD SUCCESSFUL', success: success});
+										req.flash('success', success);
+										res.redirect('/staff');
 									});
 								});
 							}
@@ -643,6 +552,7 @@ router.post('/uploadresult', function (req, res, next) {
 		});
 	}
 });
+
 
 
 //post the register

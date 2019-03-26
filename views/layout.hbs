@@ -64,6 +64,14 @@
         <a class="nav-link" href="/login">Sign In</a>
       </li>
       {{/if}}
+	  {{#if admin}}
+		<li class="nav-item">
+        <a class="nav-link" href="/admin">Admin Corner</a>
+		<li class="nav-item">
+        <a class="nav-link" href="/students">Admit New Student</a>
+		<li class="nav-item">
+        <a class="nav-link" href="/fees">Add Fees</a>
+	  {{/if}}
       <!--
     </ul>
     <form class="form-inline my-2 my-lg-0">
