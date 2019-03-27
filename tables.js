@@ -5,7 +5,7 @@ var db = require('./db.js');
 	console.log('REsult1 table created');
 });
 
-db.query('CREATE TABLE IF NOT EXISTS result2 (reg_no varchar(255) NOT NULL, class varchar(255) NOT NULL, full_name varchar(255) NOT NULL, uploaded_by varchar(255) NOT NULL, session varchar(255) NOT NULL,  term varchar (255) NOT NULL, position varchar(255) NOT NULL, aggregate int(11) NOT NULL, total int(11) NOT NULL, teachers_remark text NOT NULL, principal's_remark text NOT NULL, date_uploaded DATETIME DEFAULT CURRENT_TIMESTAMP)', function(err, results){
+db.query('CREATE TABLE IF NOT EXISTS result2 (reg_no varchar(255) NOT NULL, class varchar(255) NOT NULL, full_name varchar(255) NOT NULL, uploaded_by varchar(255) NOT NULL, session varchar(255) NOT NULL,  term varchar (255) NOT NULL, position varchar(255) NOT NULL, aggregate int(11) NOT NULL, total int(11) NOT NULL, teachers_remark text NOT NULL, principals_remark text NOT NULL, date_uploaded DATETIME DEFAULT CURRENT_TIMESTAMP)', function(err, results){
 	if (err) throw err;
 	console.log('REsult2 table created');
 });

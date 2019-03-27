@@ -38,6 +38,28 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+hbs.registerHelper("setVar", function (varName, options){
+
+	return options.fn(varName);
+	
+});
+
+//Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
+/*
+app.use(function(req, res, next){
+
+    //if there's a flash message in the session request, make it available in the response, then delete it
+
+    res.locals.getMessages = req.session.flash;
+console.log( res.locals, req.session )
+    delete req.session.flash;
+
+    next();
+
+});
+
+*/
+
 //create helper
 hbs.registerHelper('paginate', require('handlebars-paginate'));
 //register partials
@@ -92,7 +114,13 @@ app.use(function(req, res, next){
   res.locals.isAuthenticated = req.isAuthenticated();
   next(); 
 });
-
+/*
+app.use(function( req, res, next){
+	res.locals.getMessages = req.session.flash;
+	delete req.session.flash;
+	next();
+});
+*/
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 

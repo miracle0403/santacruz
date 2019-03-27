@@ -25,7 +25,21 @@ const saltRounds = bcrypt.genSalt( 10, rounds);
 
 //get home 
 router.get('/',  function(req, res, next) {
-	res.render('index', {title: 'SANCTA CRUX'});
+	var messages = res.locals.getMessages();
+	console.log( messages )
+	if( messages.notify ){
+		console.log( messages.notify );
+		res.render('index', {title: 'SANCTA CRUX', ShowMessage: true, messages: messages.notify});
+	}else{
+		console.log( 'no notify' );
+		res.render('index', {title: 'SANCTA CRUX'});
+	}
+});
+
+
+router.get('/redirect', function(req, res){
+	req.flash('notify', 'Redirect successful!');
+	res.redirect('/');
 });
 
 //product 
@@ -562,9 +576,27 @@ router.post('/uploadresult', function (req, res, next) {
 	var classTeacher = req.body.classTeacher;
 	var term = req.body.term;
 	var Class = req.body.Class;
+	var grade1 = req.body.grade1;
+	var grade2 = req.body.grade2;
+	var grade3 = req.body.grade3;
+	var grade4 = req.body.grade4;
+	var grade5 = req.body.grade5;
+	var grade6 = req.body.grade6;
+	var grade7 = req.body.grade7;
+	var grade8 = req.body.grade8;
+	var grade9 = req.body.grade9;
+	var grade10 = req.body.grade10;
+	var grade11 = req.body.grade11;
+	
 	var sujects = [sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11];
 	var grades = [grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, grade11];
+	var exams = [exam, exam2, exam3, exam4, exam5, exam6, exam7, exam8, exam9, exam10, exam11];
+	var CAs = [CA, CA2, CA3, CA4, CA5, CA6, CA7, CA8, CA9, CA10, CA11];
+	var subjectsTotal = [subjectTotal, subjectTotal2, subjectTotal3, subjectTotal4, subjectTotal5, subjectTotal6, subjectTotal7, subjectTotal8, subjectTotal9, subjectTotal10, subjectTotal11];
+	var classPositions = [classPosition, classPosition2, classPosition3, classPosition4, classPosition5, classPosition6, classPosition7, classPosition8, classPosition9, classPosition10, classPosition11];
 	
+	
+
 	var errors = req.validationErrors();
 	if (errors) { 
 	
@@ -580,15 +612,31 @@ router.post('/uploadresult', function (req, res, next) {
 				res.render('staff', { title: 'UPLOAD UNSUCCESSFUL', error: error});
 			}else{
 				//get the full name.
-				db.query('SELECT full_name FROM user WHERE reg_no = ?', [regNo], function(err, results, fields){
+				db.query('SELECT full_name FROM students WHERE reg_no = ?', [regNo], function(err, results, fields){
 					if (err) throw err;
 					if(results.length === 0){
 						var error = 'This registration number does not exist in the database.';
 						res.render('staff', { title: 'UPLOAD UNSUCCESSFUL', error: error});
 					}else{
 						var fullname = results[0].full_name;
-						//insert it 
-						
+						//get the staff that uploaded.
+						var currentUser  = req.session.passport.user.user_id;
+						db.query('SELECT full_name FROM users WHERE user_id =  ?', function(err, results, fields){
+							if( err ) throw err;
+							var staff = results[0].full_name;
+						//loop and insert it.
+							for(var i  = 0; i < subjects.length; i++){
+								db.query('INSERT INTO result1 (reg_no, full_name, class,  uploaded_by, session, term, subject, grade, CA, position, exam, total) VALUES( ?,?,?,?,?,?,?,?,?,?,?,? )', [regNo, fullname, Class, staff, session, term, subjects[i], grades[i], CAs[i], classPositions[i], exams[i], subjectsTotal[i] ], function( err, results, fields){
+									if( err ) throw err;
+									//enter into the next database which is result2
+									db.query('INSERT INTO result2 (class, reg_no, full_name, uploaded_by, session, term, position, aggregate, total, teachers_remark, principals_remark) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', [Class, regNo, fullname, staff, session, term, position, aggregate, total, principal, classTeacher], function( err, resullts, fields){
+										if( err ) throw err;
+										var success = "Congrats" + staff + ", you have uploaded" + fullname + "'s result successfully";
+										res.render('staff', {title: 'UPLOAD SUCCESSFUL', success: success});
+									});
+								});
+							}
+						});
 					}
 				});
 			}
