@@ -22,10 +22,8 @@ const saltRounds = bcrypt.genSalt( 10, rounds);
 
 
 
-
-//get home 
-router.get('/',  function(req, res, next) {
-	var messages = res.locals.getMessages();
+/*
+var messages = res.locals.getMessages();
 	if( messages.notify ){
 		console.log( messages.notify );
 		res.render('index', {title: 'SANCTA CRUX', ShowMessage: true, messages: messages.notify});
@@ -33,6 +31,83 @@ router.get('/',  function(req, res, next) {
 		console.log( 'no notify' );
 		res.render('index', {title: 'SANCTA CRUX'});
 	}
+	
+*/
+
+//get home 
+router.get('/',  function(req, res, next) {
+	db.query('SELECT * FROM site_settings', function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			res.redirect('/welcome');
+		}else{
+			var site_settings = {
+				name: results[0].name,
+				slug: results[0].slug,
+				url: results[0].url,
+				description: results[0].description
+			}
+			if(req.isAuthenticated()){
+				var currentUser = req.session.passport.user.user_id;
+				//check if user is a admin.
+				db.query('SELECT user FROM admin WHERE user = ?', [currentUser], function(err, results, fields){
+					if(err) throw err;
+					if(results.length === 0){
+						db.query('SELECT user FROM staff WHERE user = ?', [currentUser], function(err, results, fields){
+							if(err) throw err;
+							if(results.length === 0){
+								res.render('index', {subtitle: site_settings.name, title: site_settings.name, slug: site_settings.slug, description: site_settings.description});
+							}else{
+								res.render('index', {subtitle: site_settings.name, title: site_settings.name, staff: results[0].user, slug: site_settings.slug, description: site_settings.description});
+							}
+						});
+					}else{
+						res.render('index', {subtitle: site_settings.name, title: site_settings.name, slug: site_settings.slug, description: site_settings.description, admin: results[0].user});
+					}
+				});
+			}else{
+				res.render('index', {subtitle: site_settings.name, title: site_settings.name, slug: site_settings.slug, description: site_settings.description});
+			}
+		}
+	});
+});
+
+//get home 
+router.get('/fees', ensureLoggedIn('/login'), function(req, res, next) {
+	db.query('SELECT * FROM site_settings', function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			res.redirect('/welcome');
+		}else{
+			var site_settings = {
+				name: results[0].name,
+				slug: results[0].slug,
+				url: results[0].url,
+				description: results[0].description
+			}
+			if(req.isAuthenticated()){
+				var currentUser = req.session.passport.user.user_id;
+				//check if user is a admin.
+				db.query('SELECT user FROM admin WHERE user = ?', [currentUser], function(err, results, fields){
+					if(err) throw err;
+					if(results.length === 0){
+						db.query('SELECT user FROM staff WHERE user = ?', [currentUser], function(err, results, fields){
+							if(err) throw err;
+							if(results.length === 0){
+								res.render('fees', {subtitle: 'ADD FEES', title: site_settings.name, slug: site_settings.slug, description: site_settings.description});
+							}else{
+								res.render('fees', {subtitle: 'ADD FEES', title: site_settings.name, slug: site_settings.slug, description: site_settings.description, staff: results[0].user});
+							}
+						});
+					}else{
+						res.render('fees', {subtitle: 'ADD FEES', title: site_settings.name, slug: site_settings.slug, description: site_settings.description, admin: results[0].user});
+					}
+				});
+			}else{
+				res.render('fees', {title: 'SANCTA CRUX'});
+			}
+		}
+	});
 });
 
 
@@ -50,6 +125,8 @@ router.get('/students', ensureLoggedIn('/login'), function(req, res, next){
 			}else{
 				if( messages.success){
 					res.render('students', {title: 'ADD NEW STUDENT', ShowMessage: true, success: messages.success, admin: admin});
+				}else{
+					res.render('students', {title: 'ADD NEW STUDENT', admin: admin});
 				}
 			}
 		}
@@ -184,37 +261,310 @@ router.get('/staff', ensureLoggedIn('/login'), function(req, res, next) {
 
 
 //get login
-router.get('/login', function(req, res, next) {  
-	const flashMessages = res.locals.getMessages( );
-	if( flashMessages.error ){
-		res.render( 'login', {
-			title: 'LOGIN',
-			showErrors: true,
-			errors: flashMessages.error
-		});
-	}else{
-		res.render('login', { title: 'LOG IN'});
-	}
+router.get('/login', function(req, res, next) {
+	db.query('SELECT * FROM site_settings', function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			res.redirect('/welcome');
+		}else{
+			var site_settings = {
+				name: results[0].name,
+				slug: results[0].slug,
+				url: results[0].url,
+				description: results[0].description
+			}
+			var flashMessages = res.locals.getMessages( );
+			if( flashMessages.error ){
+				res.render( 'login', {
+					subtitle: 'LOGIN',
+					showErrors: true,
+					errors: flashMessages.error
+				});
+			}else{
+				res.render('login', { subtitle: 'LOG IN', title: site_settings.name, slug: site_settings.slug, description: site_settings.description});
+			}
+		}
+	});
 });
 
 
 //register get request
-router.get('/register', function(req, res, next) {	
-    res.render('register',  { title: 'REGISTRATION'});
+router.get('/register', function(req, res, next) {
+	db.query('SELECT * FROM site_settings', function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			res.redirect('/welcome');
+		}else{
+			var site_settings = {
+				name: results[0].name,
+				slug: results[0].slug,
+				url: results[0].url,
+				description: results[0].description
+			}
+			res.render('register',  {subtitle: 'REGISTRATION', title: site_settings.name, slug: site_settings.slug, description: site_settings.description});
+		}
+	});
+});
+
+//welcome get request
+router.get('/welcome', function(req, res, next) {	
+    res.render('welcome',  { title: 'WELCOME PAGE'});
 });
 
 //check-result get request
-router.post('/check-result', function(req, res, next) {	
+router.get('/check-result', function(req, res, next) {
+	db.query('SELECT * FROM site_settings', function(err, results, fields){
+		if(err) throw err;
+		if(results.length === 0){
+			res.redirect('/welcome');
+		}else{
+			var site_settings = {
+				name: results[0].name,
+				slug: results[0].slug,
+				url: results[0].url,
+				description: results[0].description
+			}
+			res.render('checkResult',  {subtitle: 'CHECK RESULT', title: site_settings.name, slug: site_settings.slug, description: site_settings.description});
+		}
+	});
+});
+
+
+//check-result get request
+router.post('/checkresult', function(req, res, next) {	
     req.checkBody('reg_no', 'Registration number must be between 6 to 25 characters').len(6,25).trim();
 	req.checkBody('session', 'Session must be between 8 to 25 characters').len(8,25).trim();
 	req.checkBody('term', 'Term must be 3 characters').len(3).trim();
 	req.checkBody('pin', 'Pin must be between 10 to 30 characters').len(10,30).trim().escape();
 	
+	var errors = req.validationErrors();
 	if (errors) { 
 	
 		console.log(JSON.stringify(errors));
   
 		res.render('checkResult', { title: 'CHECK RESULT FAILED', errors: errors});
+	}else{
+		var reg_no = req.body.reg_no;
+		var term = req.body.term;
+		var pin = req.body.pin;
+		var session = req.body.session;
+		
+		db.query('SELECT reg_no FROM students WHERE reg_no = ?', [reg_no], function(err, results, fields){
+			if(err) throw err;
+			if(results.length === 0){
+				var error = 'This reg number does not exist.';
+				req.flash('regerror', error);
+				res.redirect('/check-result');
+			}else{
+				//check if the user has been blocked before.
+				db.query('SELECT reg_no FROM pin_barred WHERE reg_no = ?', [reg_no], function(err, results, fields){
+					if(err) throw err;
+					if(results.length > 0){
+						var error = 'You have been barred from using this service. Please contact our support for more details.';
+						req.flash('regerror', error);
+						res.redirect('/check-result');
+					}else{
+						//check if the pin exists.
+						db.query('SELECT pin FROM pins WHERE pin = ?', [pin], function(err, results, fields){
+							if(err) throw err;
+							if(results.length === 0){
+								//check the number of times
+								db.query('SELECT reg_no, times_entered, date_entered FROM pin_restrict WHERE reg_no = ?', [reg_no], function(err, results, fields){
+									if(err) throw err;
+									var amo = results.slice(-1)[0];
+									var amount = amo.times_entered;
+									
+									var last_date = amo.last_date;
+									var now = new Date();
+									var distance = last_date - now;
+									var days = Math.floor(distance /(1000 * 60 * 60 * 24));
+									var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+							  		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+							  		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+							
+									var timeout = 20;
+									if(days > 0){
+										//start afresh
+										db.query('INSERT INTO pin_restrict (reg_no, pin, times_entered, date_entered) VALUES(?,?,?,?)', [reg_no, pin, 0, now], function(err, results, fields){
+											if(err) throw err;
+											var left = 4;
+											var error = 'This pin is incorrect. You will be barred if you try a wrong or used pin ' + left + ' more times';
+											req.flash('regerror', error);
+											res.redirect('/check-result');
+										});
+									}else{
+										if(hours > 0){
+											//start afresh
+											db.query('INSERT INTO pin_restrict (reg_no, pin, times_entered, date_entered) VALUES(?,?,?,?)', [reg_no, pin, 0, now], function(err, results, fields){
+												if(err) throw err;
+												var left = 4;
+												var error = 'This pin is incorrect. You will be barred if you try a wrong or used pin ' + left + ' more times';
+												req.flash('regerror', error);
+												res.redirect('/check-result');
+											});
+										}else{
+											if(minutes > 30){
+												db.query('INSERT INTO pin_restrict (reg_no, pin, times_entered, date_entered) VALUES(?,?,?,?)', [reg_no, pin, 0, now], function(err, results, fields){
+													if(err) throw err;
+													var left = 4;
+													var error = 'This pin is incorrect. You will be barred if you try a wrong or used pin ' + left + ' more times';
+													req.flash('regerror', error);
+													res.redirect('/check-result');
+												});
+											}else{
+												if(minutes < 30){
+													var remain = amount + 1;
+													db.query('INSERT INTO pin_restrict (reg_no, pin, times_entered, date_entered) VALUES(?,?,?,?)', [reg_no, pin, remain, now], function(err, results, fields){
+														if(err) throw err;
+														if (remain === 5){
+															db.query('INSERT INTO pin_barred (reg_no, date_barred) VALUES(?,?)', [reg_no, now], function(err, results, fields){
+																if(err) throw err;
+																var error = 'This pin is incorrect. You have been barred from using this service. Contact us for more details.';
+																req.flash('regerror', error);
+																res.redirect('/check-result');
+															});
+														}else{
+															var left = amount - remain
+															var error = 'This pin is incorrect. You will be barred if you try a wrong or used pin ' + left + ' more times';
+															req.flash('regerror', error);
+															res.redirect('/check-result');
+														}														
+													});													 
+												}
+											}
+										}
+									}
+								});
+							}else{
+								//if pin exist, check the amount of times it should be used.
+								db.query('SELECT * FROM pin_settings', function(err, results, fields){
+									if(err) throw err;
+									if(results.length === 0){
+										var error = 'Something Went Wrong. That is all we know. Contact us to fix this ASAP';
+										req.flash('regerror', error);
+										res.redirect('/check-result');
+									}else{
+										var pin_settings = {
+											fees_restriction: results[0].fees_restriction,
+											times_used: results[0].times_used,
+											fees_consider: results[0].fees_consider
+										}
+										if(pin_settings.fees_restriction === 'NO'){
+										//YES MEANS NO SCHOOL FEES NO RESULT
+											db.query('SELECT * FROM pin_entrance WHERE pin = ?',[pin], function(err, results, fields){
+												if(err) throw err;											
+												if(results.length ===0){
+													db.query('INSERT INTO pin_entrance (reg_no, pin, term, session, times_used) VALUES(?,?,?,?,?)', [reg_no, pin, term, session, 1], function(err, results, fields){
+														if(err) throw err;
+														var success = 'Welcome! You have used your pin Once';
+														req.flash('regsuccess', success);
+														res.redirect('/result/' + reg_no + '/' + session + '/' + term );
+													});
+												}else{
+													var pin_entrance = {
+														reg_no: results[0].reg_no,
+														times_used: result[0].times_used,
+														session: results[0].session,
+														term: results[0].term,
+														pin: results[0].pin,
+														date_used: result[0].date_used
+													}
+													
+													if(reg_no !== pin_entrance.reg_no){
+														var error = 'This pin has been used by someone else!';
+														req.flash('regerror', error);
+														res.redirect('/check-result');
+													}else{
+														var left = pin_settings.times_used - pin_entrance.times_used;
+														if(left === 0){
+															var error = 'You can not use this pin again. Please get a  new pin to continue using thiis service.';
+															req.flash('regerror', error);
+															res.redirect('/check-result');
+														}else{
+															if(session === pin_entrance.session &&  term === pin_entrance.term){
+																var remain = pin_entrance.times_used + 1;
+																db.query('UPDATE pin_entrance SET times_used = ? WHERE pin = ?', [remain, pin], function(err, results, fields){
+																	if(err) throw err;
+																	var success = 'Welcome! You have used your pin ' + remain + ' times';
+																	req.flash('regsuccess', success);
+																	res.redirect('/result/' + reg_no + '/' + session + '/' + term );
+																});
+															}else{
+																var error = 'Ooops! This pin was not used for either the term or the session. Please try again.';
+																req.flash('regerror', error);
+																res.redirect('/check-result');
+															}
+														}
+													}
+												}
+											});
+										}else{
+											//get the students balance
+											db.query('SELECT * FROM result_eligible WHERE reg_no = ? and session = ? and term = ?', [reg_no, session, term],  function(err, results, fields){
+												if(err) throw err;									
+												if(results.length  === 0){
+													var error = 'It seems you have not paid completed this term school fees and as a result, we can not show you your result. If you think this is a mistake please contact us ASAP and we will rectify it immediately.';
+													req.flash('regerror', error);
+													res.redirect('/check-result');
+												}else{
+													db.query('SELECT * FROM pin_entrance WHERE pin = ?',[pin], function(err, results, fields){
+														if(err) throw err;											
+														if(results.length ===0){
+															db.query('INSERT INTO pin_entrance (reg_no, pin, term, session, times_used) VALUES(?,?,?,?,?)', [reg_no, pin, term, session, 1], function(err, results, fields){
+																if(err) throw err;
+																var success = 'Welcome! You have used your pin Once';
+																req.flash('regsuccess', success);
+																res.redirect('/result/' + reg_no + '/' + session + '/' + term );
+															});
+														}else{
+															var pin_entrance = {
+																reg_no: results[0].reg_no,
+																times_used: result[0].times_used,
+																session: results[0].session,
+																term: results[0].term,
+																pin: results[0].pin,
+																date_used: result[0].date_used
+															}
+															
+															if(reg_no !== pin_entrance.reg_no){
+																var error = 'This pin has been used by someone else!';
+																req.flash('regerror', error);
+																res.redirect('/check-result');
+															}else{
+																var left = pin_settings.times_used - pin_entrance.times_used;
+																if(left === 0){
+																	var error = 'You can not use this pin again. Please get a  new pin to continue using thiis service.';
+																	req.flash('regerror', error);
+																	res.redirect('/check-result');
+																}else{
+																	if(session === pin_entrance.session &&  term === pin_entrance.term){
+																		var remain = pin_entrance.times_used + 1;
+																		db.query('UPDATE pin_entrance SET times_used = ? WHERE pin = ?', [remain, pin], function(err, results, fields){
+																			if(err) throw err;
+																			var success = 'Welcome! You have used your pin ' + remain + ' times';
+																			req.flash('regsuccess', success);
+																			res.redirect('/result/' + reg_no + '/' + session + '/' + term );
+																		});
+																	}else{
+																		var error = 'Ooops! This pin was not used for either the term or the session. Please try again.';
+																		req.flash('regerror', error);
+																		res.redirect('/check-result');
+																	}
+																}
+															}
+														}
+													});
+												}
+											});
+										}
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+		});	
 	}
 });
 
@@ -268,7 +618,6 @@ router.get('/application/regNo=:regNo', function(req, res, next) {
 router.get('/logout', function(req, res, next) {
   req.logout();
   req.session.destroy();
-  req.flash('notify', 'You are Logged Out');
   res.redirect('/');
 });
 

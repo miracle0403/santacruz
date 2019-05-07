@@ -1,6 +1,22 @@
 var db = require('./db.js');
 
-/*db.query('CREATE TABLE IF NOT EXISTS students (reg_no varchar(255) NOT NULL, DOB DATE NULL, full_name varchar(255) NOT NULL, passport varchar(255) NOT NULL, Class varchar(255) NOT NULL,  date_admitted DATE NOT NULL, performance varchar(255) NOT NULL, Guardian varchar(255) NOT NULL, title varchar(255)  NOT NULL, guardian_phone BIGINT NOT NULL, student_phone BIGINT NULL, guardian_email varchar(255) NOT NULL, student_email varchar(255) NULL, sex varchar(255) NOT NULL, guardian_STO varchar(255) NOT NULL, student_STO varchar(255) NOT NULL, guardian_address varchar(255) NOT NULL, student_address varchar(255) NOT NULL, guardian_occupation varchar(255) NOT NULL, student_madien_name varchar(255) NOT NULL', function(err, results){
+/*db.query('CREATE TABLE site_settings (name varchar(255) NOT NULL, slug varchar(255) NOT NULL, description text NOT NULL, url varchar(255) NOT NULL)', function(err, results){
+	if (err){
+		console.log(err)
+	}else{
+		console.log('site_settings table created');
+	}
+});
+
+db.query('CREATE TABLE previous_school (reg_no INT(11) NOT NULL, school_name varchar(255) NOT NULL, class_of_entrance varchar(255) NOT NULL, year_entered varchar(255) NOT NULL)', function(err, results){
+	if (err){
+		console.log(err)
+	}else{
+		console.log('school table created');
+	}
+});
+
+db.query('CREATE TABLE IF NOT EXISTS students (reg_no varchar(255) NOT NULL, DOB DATETIME NOT NULL, full_name varchar(255) NOT NULL, passport varchar(255) NOT NULL, Class_admitted varchar(255) NOT NULL,  date_admitted DATETIME NOT NULL, performance varchar(255) NOT NULL, Guardian varchar(255) NOT NULL, title varchar(255)  NOT NULL, guardian_phone BIGINT(10) NOT NULL, student_phone BIGINT(10) NULL, guardian_email varchar(255) NOT NULL, student_email varchar(255) NULL, sex varchar(255) NOT NULL, guardian_STO varchar(255) NOT NULL, student_STO varchar(255) NOT NULL, guardian_address varchar(255) NOT NULL, student_address varchar(255) NOT NULL, guardian_occupation varchar(255) NOT NULL, student_madien_name varchar(255) NOT NULL', function(err, results){
 	if (err) throw err;
 	console.log('students table created');
 });
@@ -30,7 +46,7 @@ db.query('CREATE TABLE IF NOT EXISTS pins (reg_no INT(11) NULL, pin varchar (255
 	console.log('pin table created');
 });
 
-db.query('CREATE TABLE IF NOT EXISTS pin_restrict (user varchar (255) NOT NULL, reg_no varchar(255) NOT NULL, pin varchar (255) UNIQUE NOT NULL, times_entered INT, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, status varchar(255) NOT NULL)', function(err, results){
+db.query('CREATE TABLE IF NOT EXISTS pin_restrict (reg_no varchar(255) NOT NULL, pin varchar (255) NOT NULL, times_entered INT, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP)', function(err, results){
 	if (err) throw err;
 	console.log('pin table created');
 });

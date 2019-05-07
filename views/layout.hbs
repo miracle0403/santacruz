@@ -25,6 +25,12 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
+	  
+	  {{#if staff}}
+		<li class="nav-item">
+        <a class="nav-link" href="/staff">Upload Result</a>
+		</li>
+	  {{/if}}
       <li class="nav-item">
         <a class="nav-link" href="/news">Latest News</a>
       </li>
@@ -45,10 +51,11 @@
       <li class="nav-item">
         <a class="nav-link" href="/#contactus" >Contact Us</a>
       </li>
-	  {{#if isAuthenticated}}
-            <li class="nav-item">
+	  <li class="nav-item">
 			<a class="nav-link" href="/check-result">Check Result</a>
 		  </li>
+	  {{#if isAuthenticated}}
+            
 		  
             <li class="nav-item">
         <a class="nav-link" href="/wardreport">WARD REPORTS</a>
@@ -67,11 +74,11 @@
       {{/if}}
 	  {{#if admin}}
 		<li class="nav-item">
-        <a class="nav-link" href="/admin">Admin Corner</a>
+			<a class="nav-link" href="/admin">Admin Corner</a></li>
 		<li class="nav-item">
-        <a class="nav-link" href="/students">Admit New Student</a>
+        <a class="nav-link" href="/students">Admit New Student</a></li>
 		<li class="nav-item">
-        <a class="nav-link" href="/fees">Add Fees</a>
+        <a class="nav-link" href="/fees">Add Fees</a></li>
 	  {{/if}}
       <!--
     </ul>
