@@ -1,0 +1,62 @@
+ {{> spagenav}}
+ 
+ <div class = "content">
+ 
+ <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+			   <h1 class="title text-center">ALL STUDENTS</h1>
+                
+			  </div>
+              <div class="card-body">
+			 
+               <div >
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        FULL NAME
+                      </th>
+                      <th>
+                        REG ID
+                      </th>
+                      <th>
+                        CLASS TEACHER
+                      </th>
+                      <th>
+                        CLASS
+                      </th>
+					 
+                    </thead>
+                    <tbody>
+					{{#if student}}
+					{{#each student}}
+                      <tr>
+                        <td>
+                          {{full_name}}
+                        </td>
+                        <td>
+                          {{regid}}
+                        </td>
+                        <td>
+                          {{classteacher}}
+                        </td>
+                        <td>
+                          {{theclass}}
+                        </td>
+						
+                      </tr>
+					  {{/each}}
+					  {{/if}}
+					  </tbody>
+					 </table>
+					</div>
+					
+					
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ </div>

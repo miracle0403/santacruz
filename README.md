@@ -1,2 +1,0 @@
-# santacruz
-A school software

@@ -1,0 +1,784 @@
+{{> spagenav}}  
+ <div class = "content">
+{{#if errors}}
+  {{#each errors}}
+  <div class="alert alert-danger">
+    {{this.msg}}
+  </div>
+  {{/each}}
+{{/if}}
+
+{{#if error}}
+  <div class="alert alert-danger">
+    {{error}}
+  </div>
+  {{/if}}
+  
+  
+  {{#if success}}
+  <div class="alert alert-success">
+    {{success}}
+  </div>
+  {{/if}}
+{{#if start}}
+<div class="card card-user">
+	  <div class="card-header">
+		<h5 class="card-title text-center">EDIT RESULTS</h5>
+	  </div>
+	  <div class="card-body"><br><br>
+	  {{#if student}}
+		<form action = "/editresult/{{student.resultid}}" method = "post">
+		{{/if}}
+		  <div class="row">
+			<div class="col-md-6 pr-1">
+			  <div class="form-group">
+				<label>Student's Full Name</label>
+				{{#if student}}
+				<input class="form-control" placeholder="" type="text" name = "full_name" value = "{{student.full_name}}" readonly/>
+               
+							
+					 </div>
+			</div>
+			<div class="col-md-3 pr-1">
+			  <div class="form-group">
+				<label>Class</label>
+				<input class="form-control" placeholder="" type="text" name = "theclass" value = "{{student.theclass}}" readonly/>
+               
+			   </div>
+			   </div>
+			   <div class="col-md-3 pr-1">
+			  <div class="form-group">
+				<label>Student's Reg ID</label>
+				<input class="form-control" placeholder="" type="text" name = "regid" value = "{{student.regid}}" readonly/>
+                 {{/if}}
+			   </div>
+			</div></div>
+			{{#if student}}
+			
+			<div class="row">
+			<div class="col-md-6 pr-1">
+			  <div class="form-group">
+				<label>Term</label>
+					<input class="form-control" placeholder="" type="text" name = "term" value = "{{student.term}}" readonly/>
+                  
+			</div>
+		  </div>
+		  
+			<div class="col-md-6 pr-1">
+			  <div class="form-group">
+				<label>Session</label>
+					<input class="form-control" placeholder="" type="text" name = "session" value = "{{student.session}}" readonly/>
+                  
+				</div></div>
+			</div>
+			
+		  {{/if}}
+		  <p class="card-title text-center">SUBJECTS</p>
+		  
+		 
+		  <div class="row">
+		   {{#if result}}
+		  {{#each result}}
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<input class="form-control" placeholder="" type="text" name = "subject" value = "{{subject}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  {{/each}}
+		  {{/if}}
+			
+			</div>
+		
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div><div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+
+			<div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div> <div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div> <div class="row">
+			<div class="col-md-4 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<select name = "subject" class="form-control">
+					<option>None</option>
+						{{#if subjects}}
+							{{#each subjects}}
+							<option>{{subject}}</option>
+							
+						  {{/each}}
+						  {{/if}}
+										
+						
+					</select>  
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>CA</label>
+				<input class="form-control" placeholder="" type="number" name = "ca" value = "{{ca}}" />
+               
+				</div>
+			  </div>
+			  <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Subject</label>
+					<label>Exam</label>
+				<input class="form-control" placeholder="" type="number" name = "exam" value = "{{exam}}" />
+                
+				</div>
+			  </div>
+		   <div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Grade</label>
+				<input class="form-control" placeholder="" type="text" name = "grade" value = "{{grade}}" />
+               
+				</div>
+			  </div><div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Total</label>
+				<input class="form-control" placeholder="" type="number" name = "total" value = "{{total}}" />
+               
+				</div>
+			  </div>
+		  
+			
+			</div>
+			
+			
+			  <div class="form-group">
+				<label>Class Teacher's Remark</label>
+				<input class="form-control" placeholder="" type="text" name = "remark" value = "{{remark}}" required/>
+               
+			</div></div>
+			<div class="text-center">
+		  <small class = "text-center"><button class = "btn btn-primary " id = "add-admin" type "submit">SUBMIT</button></small>
+			</div>			
+		  
+		</form>
+	  </div>
+	</div>
+  </div>
+</div>
+{{else}}
+{{#if results}}
+<div class="row">
+    <div class="col-md-12">
+		<div class="card">
+		  <div class="card-header">
+		   <h5 class="title">EDIT RESULTS</h5>
+		   </div>
+		  <div class="card-body">
+			{{#each results}}
+			<p>{{full_name}}  <a href = "/editresult/{{resultid}}"> <button class = "btn btn-primary " id = "add-admin" type "button">Edit</button> </a>
+			</p>
+			{{/each}}
+		  </div>
+		</div>
+	</div>
+</div>
+{{/if}}
+
+{{/if}}
+</div>

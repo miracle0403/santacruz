@@ -1,0 +1,103 @@
+<div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+			   <h1 class="title text-center">SCHOOL REPORT CARD</h1>
+                
+			  </div>
+              <div class="card-body">
+			  <div class="row">
+				<div class="col-md-6">
+                <h5 class="title">FULL NAME: {{fullname}}</h5>
+                
+              </div>
+			  <div class="col-md-3">
+			  <h5 class="title">REG ID: {{regid}}</h5>
+			  </div>
+			  <div class="col-md-3">
+			  <h5 class="title">CLASS: {{theclass}}</h5>
+			  </div></div>
+			  <div class="row">
+			  <div class="col-md-6">
+			  <h5 class="title">SESSION: {{session}}</h5>
+			  </div>
+			  <div class="col-md-6">
+			  <h5 class="title">TERM: {{term}}</h5>
+			  </div>
+			  </div>
+               <div >
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        SUBJECTS
+                      </th>
+                      <th>
+                        CA
+                      </th>
+                      <th>
+                        EXAM
+                      </th>
+                      <th>
+                        GRADE
+                      </th>
+					  <th>
+                        TOTAL
+                      </th>
+                    </thead>
+                    <tbody>
+					{{#if results}}
+					{{#each results}}
+                      <tr>
+                        <td>
+                          {{subject}}
+                        </td>
+                        <td>
+                          {{ca}}
+                        </td>
+                        <td>
+                          {{exam}}
+                        </td>
+                        <td>
+                          {{grade}}
+                        </td>
+						<td>
+                          {{total}}
+                        </td>
+                      </tr>
+					  {{/each}}
+					  {{/if}}
+					  </tbody>
+					 </table>
+					</div>
+					
+					{{#if aggregriate}}
+                      <div class = "row">
+				<div class = "col-md-6">
+				<h5 class="card-title">NO OF SUBJECTS:		{{aggregriate.subjects}}</h5>
+				</div>
+				<div class = "col-md-6">
+				<h5 class="card-title">GRAND TOTAL:		{{aggregriate.grand_total}}</h5>
+				<br></div>
+				</div>
+				<div class = "row">
+
+				<div class = "col-md-4">
+				<h5 class="card-title">AGGREGRIATE:		{{aggregriate.aggregriate}}</h5>
+				</div>
+				<div class = "col-md-4">
+				<h5 class="card-title">POSITION:		{{aggregriate.position}}</h5>
+				</div>
+				<div class = "col-md-4">
+				<h5 class="card-title">NO OF STUDENTS:		{{studentsnumber}}</h5>
+				<br></div>
+				</div>
+				<h5 class="card-title">PRINCIPAL'S REMARK:		{{aggregriate.remark}}</h5>
+				<br><h5 class="card-title">CLASS TEACHER'S REMARK:		{{aggregriate.class_teacher_remark}}</h5>
+				</div>
+				{{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

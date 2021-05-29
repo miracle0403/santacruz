@@ -1,0 +1,79 @@
+{{> spagenav}}  
+ <div class = "content">
+{{#if errors}}
+  {{#each errors}}
+  <div class="alert alert-danger">
+    {{this.msg}}
+  </div>
+  {{/each}}
+{{/if}}
+
+
+  
+  {{#showSuccess}}
+{{#success}}
+  <div class="alert alert-success">
+    {{.}}
+  </div>
+{{/success}}
+{{/showSuccess}}
+  
+  {{#if addposition}}
+	<div class="card card-user">
+	  <div class="card-header">
+		<h5 class="card-title text-center">ADD POSITION</h5>
+	  </div>
+	  <div class="card-body"><br><br>
+	 {{#if position}}
+		<form action = "/addposition/{{theclass}}" method = "post">
+	
+		  <div class="row">
+		 
+		  {{#each position}}
+		  <div class="col-md-3 pr-1">
+		  <label>Full Name</label>
+		  <input class="form-control" placeholder="" type="text" name = "fullname" value = "{{full_name}}" readonly/>
+               
+			</div> 
+			<div class="col-md-2 pr-1">
+		  <label>Reg ID</label>
+		  <input class="form-control" placeholder="" type="text" name = "regid" value = "{{regid}}" readonly/>
+               
+			</div>
+			
+			<div class="col-md-1 pr-1">
+			<label>Term</label>
+		  <input class="form-control" placeholder="" type="text" name = "term" value = "{{term}}" readonly/>
+               
+			</div>
+			
+			
+			<div class="col-md-2 pr-1">
+			<label>Session</label>
+		  <input class="form-control" placeholder="" type="text" name = "session" value = "{{session}}" readonly/>
+               
+			</div>
+			
+			<div class="col-md-2 pr-1">
+			<label>Aggregriate</label>
+		  <input class="form-control" placeholder="" type="text" name = "aggregriate" value = "{{aggregriate}}" readonly/>
+               
+			</div>
+			
+			<div class="col-md-2 pr-1">
+			<label>Position</label>
+		  <input class="form-control" placeholder="" type="text" name = "position" value = "" required/>
+               
+			</div>
+			
+		  {{/each}}
+		  
+		  </div>	
+			<div class="text-center">
+		  <small class = "text-center"><button class = "btn btn-primary " id = "add-admin" type "submit">SUBMIT</button></small>
+			{{/if}}
+		  </div>
+	 </div>
+	</div>
+  {{/if}}
+  </div>

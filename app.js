@@ -1,101 +1,72 @@
-'use strict'
+'use strict';
+
 var createError = require('http-errors');
+var env  = require('dotenv').config();
+const nodemailer = require('nodemailer');
+var events = require('events');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-//var env  = require('dotenv').config();
-var hbs = require('express-handlebars');
-//var paginate = require('handlebars-paginate');
-//const path = require('path');
+const helmet = require("helmet");
+
+var bodyParser = require('body-parser');
+const { body, validationResult } = require('express-validator');
+var sql = require('mysql');
 var fs = require('fs');
 
-//upload requirements
-var nodemailer = require('nodemailer');
-var bodyParser = require('body-parser');
-var expressValidator = require('express-validator');
-var mysql = require('mysql');
-var myConnection = require('express-myconnection'); // express-myconnection module 
-var formidable = require('formidable');
-
-//Authentication packages
-var bcrypt = require('bcrypt-nodejs');
+var hbs = require('hbs');
+var bcrypt = require('bcryptjs');
 var securePin = require('secure-pin');
 var passport = require('passport');
 var localStrategy = require('passport-local'),Strategy;
+var myConnection = require('express-myconnection');
 var session = require('express-session');
 var MySQLStore = require ('express-mysql-session')(session);
 var flash = require('express-flash-messages');
-var db = require('./db.js'); 
-var hbs  = require('hbs');
-var tables = require('./tables.js');
+
+var db = require('./db.js');
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//var paginate = require('express-handlebars-paginate');
+
 var app = express();
 
- //view set up
+
+// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-hbs.registerHelper("setVar", function (varName, options){
 
-	return options.fn(varName);
-	
-});
+var mainfTemplate = fs.readFileSync(__dirname + '/views/spagenav.hbs', 'utf8');
+hbs.registerPartial('spagenav', mainfTemplate); 
 
-//Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
-/*
-app.use(function(req, res, next){
 
-    //if there's a flash message in the session request, make it available in the response, then delete it
 
-    res.locals.getMessages = req.session.flash;
-console.log( res.locals, req.session )
-    delete req.session.flash;
-
-    next();
-
-});
-
-*/
-
-//create helper
-hbs.registerHelper('paginate', require('handlebars-paginate'));
-//register partials
-
-var mainseoTemplate = fs.readFileSync(__dirname + '/views/mainseo.hbs', 'utf8');
-hbs.registerPartial('mainseo', mainseoTemplate); 
-
-var slideTemplate = fs.readFileSync(__dirname + '/views/slide.hbs', 'utf8');
-hbs.registerPartial('slide', slideTemplate); 
-
-//middlewares.
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
 
 var options = {
-  waitForConnections: true,
-  connectionLimit : 100,
-  host: "localhost",
-  user: "root",
-  //password: 'ifeysamuel',
-  database: "school"
-};
+	host: "localhost",
+  user: "schooldbuser",
+  password: 'MIracle1994@I'',
+  database: "schooldb"
+}
 
-app.use(myConnection(mysql, options, 'pool')); 
+app.use(myConnection(sql, options, 'pool')); 
 
-var sessionStore = new MySQLStore(options);
+var sessionStore = new MySQLStore(options); //|| new pgStore(options);
   
 app.use(session({
-  secret: 'keybabybbmnb',
+  secret: 'keybaby',
   resave: false,
   store: sessionStore,
   saveUninitialized: false,
-  name: 'school',
   /**cookie:
     #secure: true**/
   }));
@@ -108,51 +79,53 @@ app.use(flash());
 // middle ware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator());
+//app.use(expressValidator());
 
 app.use(function(req, res, next){
   res.locals.isAuthenticated = req.isAuthenticated();
   next(); 
 });
-/*
-app.use(function( req, res, next){
-	res.locals.getMessages = req.session.flash;
-	delete req.session.flash;
-	next();
-});
-*/
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter); 
+
+
+
+
+passport.use(new localStrategy(function(username, password, done){
+	console.log(username);
+ console.log(password);
+ const db = require('./db.js');
+
+  db.query('SELECT user_id, password FROM user WHERE username = ?', [username], function (err, results, fields){
+  	if (err) {done(err)};
+  if (results.length === 0){
+  		done(null, false, {
+  			message: 'Invalid Username'
+   });
+  }else {
+  		
+   const hash = results[0].password.toString();
+   bcrypt.compare(password, hash, function(err, response){
+   		if (response === true){
+   			console.log('logged in')
+			console.log(results[0]);
+   			return done(null, {user_id: results[0].user_id});
+		}else{
+			return done(null, false,{
+				message:'Invalid Password'
+       });
+      }
+    });
+   }
+ });
+}));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-passport.use(new localStrategy(function(username, password, done){
-    console.log(username);
-    console.log(password);
-	db.query('SELECT user_id, email, password FROM user WHERE username = ?', [username], function (err, results, fields){
-		if (err) {done(err)};
-		if (results.length === 0){
-			console.log('false usename')
-			done(null, false, {
-				message: 'Invalid Username'
-			});
-		}else{
-			var email = results[0].email;
-			const hash = results[0].password.toString();
-			bcrypt.compare(password, hash, function(err, response){
-				if (response === true){
-					console.log('good details')
-					return done(null, {user_id: results[0].user_id});
-				}else{
-					console.log('false password')
-					return done(null, false,{
-						message:'Invalid Password'
-					});
-				}
-			});
-		}
-	});
-}));
 
-// catch 404 and forward to error handler
+/// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -162,10 +135,10 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
 
 module.exports = app;
+module.exports.dirname = path.dirname(__filename);

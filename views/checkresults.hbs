@@ -1,0 +1,80 @@
+{{#showErrors}}
+{{#error}}
+  <div class="alert alert-danger">
+    {{.}}
+  </div>
+{{/error}}
+{{/showErrors}}
+
+{{#showSuccess}}
+{{#success}}
+  <div class="alert alert-success">
+    {{.}}
+  </div>
+{{/success}}
+{{/showSuccess}}
+
+{{#if errors}}
+  {{#each errors}}
+  <div class="alert alert-danger">
+    {{this.msg}}
+  </div>
+  {{/each}}
+{{/if}}
+
+
+<div class="content">
+<div class="card card-user">
+	  <div class="card-header">
+		<h5 class="card-title text-center">CHECK RESULT</h5>
+	  </div>
+	  <div class="card-body"><br><br>
+		<form action = "/checkresults" method = "post">
+		  
+			<div class="row">
+			<div class="col-md-3 pr-1">
+			  <div class="form-group">
+				<label>Reg ID</label>
+				<input class="form-control" placeholder="reg id" type="text" name = "regid" value = "{{regid}}" required/>
+                      </div>
+			</div>
+			<div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Class</label>
+				<input class="form-control" placeholder="class" type="text" name = "theclass" value = "{{theclass}}" required/>
+                      </div>
+			</div>
+			<div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Session</label>
+				<input class="form-control" placeholder="session" type="text" name = "session" value = "{{session}}" required/>
+                      </div>
+			</div>
+			
+			<div class="col-md-2 pr-1">
+			  <div class="form-group">
+				<label>Term</label>
+				<select name = "term" class = "form-control">
+					<option>1st Term</option>
+					<option>2nd Term</option>
+					<option>3rd Term</option>
+				</select>
+				  </div>
+			</div>
+			<div class="col-md-3 pr-1">
+			  <div class="form-group">
+				<label>Pin</label>
+				<input class="form-control" placeholder="Pin"  id = "pin" type="password" name = "pin"  required/ >
+                     </div>
+			</div></div>
+			<div class="row">
+                    <div class="update ml-auto mr-auto">
+                      <button type="submit" class="btn btn-primary text-center btn-round">Check</button>
+                    </div>
+                  </div>
+		</form>
+	  </div>
+	</div>
+  </div>
+</div>
+</div>
