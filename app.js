@@ -53,9 +53,9 @@ app.use(helmet());
 
 var options = {
 	host: "us-cdbr-east-04.cleardb.com",
-  user: "bfb3c892e9910c",
-  password: '989aea50'',
-  database: "heroku_06f6f9a405b71b3"
+  user: "bf24c600dd3fd2",
+  password: '9988d6bc',
+  database: "heroku_09e2abe7c63d458"
 }
 
 app.use(myConnection(sql, options, 'pool')); 

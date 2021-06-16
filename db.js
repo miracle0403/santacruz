@@ -31,9 +31,9 @@ const options = {
   onConnectionRelease: () => { console.log("Release"); },
   mySQLSettings: {
 	host: "us-cdbr-east-04.cleardb.com",
-  user: "bfb3c892e9910c",
-  password: '989aea50',
-  database: "heroku_06f6f9a405b71b3",
+  user: "bf24c600dd3fd2",
+  password: '9988d6bc',
+  database: "heroku_09e2abe7c63d458",
     port: '3306',
     socketPath: '/var/run/mysqld/mysqld.sock',
     charset: 'utf8',
@@ -51,9 +51,9 @@ const mySQL = PoolManager(options);
 
 var pool  = mySQL.raw.createConnection({
 	host: "us-cdbr-east-04.cleardb.com",
-  user: "bfb3c892e9910c",
-  password: '989aea50',
-  database: "heroku_06f6f9a405b71b3"
+  user: "bf24c600dd3fd2",
+  password: '9988d6bc',
+  database: "heroku_09e2abe7c63d458"
 });
 
 pool.connect();
