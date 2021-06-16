@@ -52,10 +52,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
 var options = {
-	host: "localhost",
-  user: "schooldbuser",
-  password: 'MIracle1994@I'',
-  database: "schooldb"
+	host: "us-cdbr-east-04.cleardb.com",
+  user: "bfb3c892e9910c",
+  password: '989aea50'',
+  database: "heroku_06f6f9a405b71b3"
 }
 
 app.use(myConnection(sql, options, 'pool')); 

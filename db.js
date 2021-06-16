@@ -30,10 +30,10 @@ const options = {
   onConnectionEnqueue: () => { console.log("Enqueue"); },
   onConnectionRelease: () => { console.log("Release"); },
   mySQLSettings: {
-	host: "localhost",
-  user: "schooldbuser",
-  password: 'MIracle1994@I'',
-  database: "schooldb",
+	host: "us-cdbr-east-04.cleardb.com",
+  user: "bfb3c892e9910c",
+  password: '989aea50',
+  database: "heroku_06f6f9a405b71b3",
     port: '3306',
     socketPath: '/var/run/mysqld/mysqld.sock',
     charset: 'utf8',
@@ -50,10 +50,10 @@ const options = {
 const mySQL = PoolManager(options);
 
 var pool  = mySQL.raw.createConnection({
-	host: "localhost",
-  user: "schooldbuser",
-  password: 'MIracle1994@I'',
-  database: "schooldb"
+	host: "us-cdbr-east-04.cleardb.com",
+  user: "bfb3c892e9910c",
+  password: '989aea50',
+  database: "heroku_06f6f9a405b71b3"
 });
 
 pool.connect();
