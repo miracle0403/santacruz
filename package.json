@@ -30,7 +30,7 @@
     "mv": "^2.1.1",
     "mysql": "^2.18.1",
     "mysql-connection-pool-manager": "^1.5.9",
-    "nodemailer": "^6.4.11",
+    "nodemailer": "^6.4.16",
     "nodemailer-express-handlebars": "^4.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
