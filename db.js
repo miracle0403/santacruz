@@ -49,13 +49,18 @@ const options = {
 
 const mySQL = PoolManager(options);
 
+/*var pool  = mySQL.raw.createConnection({
+	host: "us-cdbr-east-04.cleardb.com",
+  user: "bf24c600dd3fd2",
+  password: '9988d6bc',
+  database: "heroku_09e2abe7c63d458"
+});*/
 var pool  = mySQL.raw.createConnection({
 	host: "us-cdbr-east-04.cleardb.com",
   user: "bf24c600dd3fd2",
   password: '9988d6bc',
   database: "heroku_09e2abe7c63d458"
 });
-
 pool.connect();
 
 /*mysql -u root -p

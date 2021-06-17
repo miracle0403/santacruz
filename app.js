@@ -57,6 +57,12 @@ var options = {
   password: '9988d6bc',
   database: "heroku_09e2abe7c63d458"
 }
+/*var options = {
+	host: "us-cdbr-east-04.cleardb.com",
+  user: "bf24c600dd3fd2",
+  password: '9988d6bc',
+  database: "heroku_09e2abe7c63d458"
+}*/
 
 app.use(myConnection(sql, options, 'pool')); 
 
