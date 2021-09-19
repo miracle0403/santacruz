@@ -52,16 +52,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
 var options = {
-	host: "us-cdbr-east-04.cleardb.com",
-  user: "bf24c600dd3fd2",
-  password: '9988d6bc',
-  database: "heroku_09e2abe7c63d458"
+	host: "localhost",
+  user: "root",
+  password: '',
+  database: "schooldb"
 }
 /*var options = {
-	host: "us-cdbr-east-04.cleardb.com",
-  user: "bf24c600dd3fd2",
-  password: '9988d6bc',
-  database: "heroku_09e2abe7c63d458"
+	host: "162.213.255.30",
+  user: "elzarime_elzarimedemo",
+  password: 'Miracle1994@@',
+  database: "elzarime_school"
 }*/
 
 app.use(myConnection(sql, options, 'pool')); 

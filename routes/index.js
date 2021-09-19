@@ -28,8 +28,8 @@ const saltRounds = bcrypt.genSaltSync(10);
 			});
 		});	
 	});	
-}
-*/
+}*/
+
 
 /* GET home page. */
 router.get('/register', function(req, res, next) {
@@ -1244,6 +1244,7 @@ router.get('/dashboard', ensureLoggedIn('/login'), function(req, res, next) {
 							if( err ) throw err;
 							var theclasses = results;
 							const flashMessages = res.locals.getMessages( );
+							console.log(flashMessages)
 							if( flashMessages.delsuccess ){
 								res.render('dashboard', { 
 									title: 'SCHOOL', 
@@ -1932,28 +1933,32 @@ router.post('/recalculateaggregriate', authentificationMiddleware(), [	check('cl
 
 
 //add transfer student
-router.post('/transferstudent', authentificationMiddleware(), [	check('class_admitted', 'Class Admitted must be 3 to 5 characters').isLength(3, 5),  check('fullname', 'Full Name must be 8 to 25 characters').isLength(8, 25),   check('session', 'Session must be 9 characters').isLength(9),   ], function(req, res, next) {
+router.post('/transferstudent', authentificationMiddleware(), [	check('class_admitted', 'Class Admitted must be 3 to 5 characters').isLength(3, 5),  check('fullname', 'Full Name must be 8 to 25 characters').isLength(8, 25)   ], function(req, res, next) {
 	var currentUser = req.session.passport.user.user_id;
 	
 	var theclass = req.body.class_admitted;
 	var regid = req.body.regid;
 	var session = req.body.session;
 	var fullname = req.body.fullname;
-
 	
 	var errors = validationResult(req).errors;
 	if (errors.length > 0){
+		console.log(errors)
 		res.render('dashboard', { errors: errors, mess: 'DASHBOARD', session:session, fullname:fullname, theclass:theclass , regid:regid });
 	}else{
 		db.query('SELECT theclass, full_name FROM classteacher WHERE theclass = ? ', [theclass], function ( err, results, fields ){
 			if( err ) throw err;
+			console.log(results)
 			db.query('SELECT * FROM students WHERE full_name = ? and regid = ? ', [fullname, regid], function ( err, results, fields ){
 				if( err ) throw err;
+					
 				if(results.length === 0){
 					var error = 'Incorrect Student Details';
+					console.log(error);
 					req.flash('transferstudenterror', error);
 					res.redirect('/dashboard/#transferstudent');
 				}else{
+					console.log(results)
 					var classteacher = results[0].full_name;
 					db.query('UPDATE students SET theclass = ?, classteacher = ? WHERE regid = ? AND full_name = ?', [theclass, classteacher, regid, fullname], function ( err, results, fields ){
 						if( err ) throw err;
@@ -1970,7 +1975,7 @@ router.post('/transferstudent', authentificationMiddleware(), [	check('class_adm
 
 
 //add student
-router.post('/addstudent', authentificationMiddleware(), [	check('class_admitted', 'Class Admitted must be 3 to 5 characters').isLength(3, 5),  check('fullname', 'Full Name must be 8 to 25 characters').isLength(8, 25),   check('session', 'Session must be 9 characters').isLength(9),   ], function(req, res, next) {
+router.post('/addstudent', authentificationMiddleware(), [	check('class_admitted', 'Class Admitted must be 3 to 5 characters').isLength(3, 5),  check('fullname', 'Full Name must be 8 to 25 characters').isLength(8, 25)  ], function(req, res, next) {
 	var currentUser = req.session.passport.user.user_id;
 	
 	var class_admitted = req.body.class_admitted;
@@ -2359,7 +2364,7 @@ router.post('/addclassteacher', authentificationMiddleware(), function(req, res,
 			db.query('SELECT * FROM classteacher WHERE full_name = ? ', [fullname], function ( err, results, fields ){
 				if( err ) throw err;
 				if(results.length > 0){
-					var error = 'This teacher is already a theclass teacher. Relieve him of his responsibilities first before you assign a new one.';
+					var error = 'This teacher is already a class teacher. Relieve him of his responsibilities first before you assign a new one.';
 					req.flash('classteachererror', error);
 					res.redirect('/admin/#classteacher');
 				}else{

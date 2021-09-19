@@ -30,10 +30,10 @@ const options = {
   onConnectionEnqueue: () => { console.log("Enqueue"); },
   onConnectionRelease: () => { console.log("Release"); },
   mySQLSettings: {
-	host: "us-cdbr-east-04.cleardb.com",
-  user: "bf24c600dd3fd2",
-  password: '9988d6bc',
-  database: "heroku_09e2abe7c63d458",
+	host: "localhost",
+  user: "root",
+  password: '',
+  database: "schooldb",
     port: '3306',
     socketPath: '/var/run/mysqld/mysqld.sock',
     charset: 'utf8',
@@ -50,16 +50,16 @@ const options = {
 const mySQL = PoolManager(options);
 
 /*var pool  = mySQL.raw.createConnection({
-	host: "us-cdbr-east-04.cleardb.com",
-  user: "bf24c600dd3fd2",
-  password: '9988d6bc',
-  database: "heroku_09e2abe7c63d458"
+	host: "162.213.255.30",
+  user: "elzarime_elzarimedemo",
+  password: 'Miracle1994@@',
+  database: "elzarime_school"
 });*/
 var pool  = mySQL.raw.createConnection({
-	host: "us-cdbr-east-04.cleardb.com",
-  user: "bf24c600dd3fd2",
-  password: '9988d6bc',
-  database: "heroku_09e2abe7c63d458"
+	host: "localhost",
+  user: "root",
+  password: '',
+  database: "schooldb"
 });
 pool.connect();
 

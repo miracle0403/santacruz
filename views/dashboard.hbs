@@ -1,6 +1,14 @@
  {{> spagenav}}
  
  <div class = "content">
+ <br> <br>
+ {{#if errors}}
+  {{#each errors}}
+  <div class="alert alert-danger">
+    {{this.msg}}
+  </div>
+  {{/each}}
+{{/if}}
  <div class = "row">
  
  
@@ -132,7 +140,7 @@
 							
 							
 								<label>Reg ID</label>
-								<input type="text" name = "regid" class="form-control" placeholder="regid"  />
+								<input type="text" name = "regid" class="form-control" placeholder="regid"  required/>
 							
 							<label>Class</label>
 								<select name = "class_admitted" class="form-control">
