@@ -8,14 +8,10 @@ const PoolManager = require('mysql-connection-pool-manager');
 	multipleStatements: true,
 	connectionLimit : 0,
 	waitForConnections: true,
-	host: "localhost",
-	user: "root",
-	password: '',
-	database: "newdb"
-	host: "localhost",
-  user: "miracle0403",
-  password: 'MIracle1994@I',
-  database: "ezwiftdb"
+	host: "us-cdbr-east-04.cleardb.com",
+	user: "bfb3c892e9910c",
+  password: '989aea50',
+  database: "heroku_06f6f9a405b71b3"
 	
 });*/
 const options = {
@@ -30,10 +26,10 @@ const options = {
   onConnectionEnqueue: () => { console.log("Enqueue"); },
   onConnectionRelease: () => { console.log("Release"); },
   mySQLSettings: {
-	host: "localhost",
-  user: "root",
-  password: '',
-  database: "schooldb",
+	host: "us-cdbr-east-04.cleardb.com",
+	user: "bfb3c892e9910c",
+  password: '989aea50',
+  database: "heroku_06f6f9a405b71b3",
     port: '3306',
     socketPath: '/var/run/mysqld/mysqld.sock',
     charset: 'utf8',
@@ -56,10 +52,10 @@ const mySQL = PoolManager(options);
   database: "elzarime_school"
 });*/
 var pool  = mySQL.raw.createConnection({
-	host: "localhost",
-  user: "root",
-  password: '',
-  database: "schooldb"
+	host: "us-cdbr-east-04.cleardb.com",
+	user: "bfb3c892e9910c",
+  password: '989aea50',
+  database: "heroku_06f6f9a405b71b3"
 });
 pool.connect();
 
